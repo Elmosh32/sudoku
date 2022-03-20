@@ -1,0 +1,54 @@
+@import url(http://fonts.googleapis.com/css?family=Pacifico);
+
+.start-screen {
+    margin: 0 auto;
+    width: 400px;
+    background-color: whitesmoke;
+    box-shadow: 10px 10px black;
+}
+
+.Welcome{
+  text-align: center;
+  color: CornflowerBlue;
+  font-size: 24px;
+  font-family: 'Pacifico', cursive;
+  padding-bottom: 10px;
+}
+
+.start-screen h1, h2 {
+    color: DarkOrchid;
+}
+
+#cmdStart {
+    padding: 5px;
+    margin: 5px;
+    background-color: papayawhip;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    width: 450px;
+    height: 300px;
+    padding: 5px;
+    margin: 0 auto
+}
+
+.endmsg{
+  text-align: center;
+  color: Orchid;
+  font-size: 48px;
+  font-family: 'Syncopate', sans-serif;
+  padding-bottom: 10px;
+}
+
+.numbers {
+    display: grid;
+    position:absolute;
+    right: 220px;;
+    top: 178px;
+    grid-gap: 5px 5px;
+    grid-template-columns: repeat(3, 1fr);
+    width: 300px;
+    margin: 0 auto;
+}
