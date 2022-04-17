@@ -1,40 +1,100 @@
-@import url(http://fonts.googleapis.com/css?family=Pacifico);
+@import url(https://fonts.googleapis.com/css?family=Pacifico);
+
+body {
+  /* height: 1200px; */
+  overflow-y: scroll;
+  scrollbar-color: rebeccapurple green;
+  scrollbar-width: thin;
+  margin: 0;
+  justify-content: center;
+  align-items: center;
+}
+
+.relative {
+  position: relative;
+  flex-wrap: wrap;
+}
+
+.navbar-brand {
+  font-weight: bold;
+  float: left;
+  height: 50px;
+  padding: 15px 15px;
+  font-size: 25px;
+  line-height: 25px;
+}
+
+.collapse, .navbar-collapse {
+  margin-left: 16px;
+}
+
+.container-fluid {
+  padding-right: 0;
+  padding-left: 0;
+  margin-right: auto;
+  margin-left: auto
+}
 
 .start-screen {
-    margin: 0 auto;
-    width: 400px;
-    background-color: whitesmoke;
-    box-shadow: 10px 10px black;
-}
-
-.Welcome{
+  margin: 0 auto;
+  padding-top: 4px;
+  width: auto;
   text-align: center;
-  color: CornflowerBlue;
-  font-size: 24px;
-  font-family: 'Pacifico', cursive;
-  padding-bottom: 10px;
-}
-
-.start-screen h1, h2 {
-    color: DarkOrchid;
+  align-items: center;
 }
 
 #cmdStart {
-    padding: 5px;
-    margin: 5px;
-    background-color: papayawhip;
+  background: #52ebff;
+  background-image: -webkit-linear-gradient(top, #52ebff, #2b63b8);
+  background-image: -moz-linear-gradient(top, #52ebff, #2b63b8);
+  background-image: -ms-linear-gradient(top, #52ebff, #2b63b8);
+  background-image: -o-linear-gradient(top, #52ebff, #2b63b8);
+  background-image: linear-gradient(to bottom, #52ebff, #2b63b8);
+  -webkit-border-radius: 10;
+  border-radius: 10px;
+  font-family: Courier New;
+  color: #ffffff;
+  font-size: 22px;
+  padding: 10px 20px 10px 20px;
+  border: solid #00d9ff 2px;
+  text-decoration: none;
+  /* margin-left: 200px; */
 }
 
-.board {
-    display: grid;
-    grid-template-columns: repeat(9, 1fr);
-    width: 450px;
-    height: 300px;
-    padding: 5px;
-    margin: 0 auto
+#cmdStart:hover {
+  background: #3cfcdc;
+  background-image: -webkit-linear-gradient(top, #3cfcdc, #3484d9);
+  background-image: -moz-linear-gradient(top, #3cfcdc, #3484d9);
+  background-image: -ms-linear-gradient(top, #3cfcdc, #3484d9);
+  background-image: -o-linear-gradient(top, #3cfcdc, #3484d9);
+  background-image: linear-gradient(to bottom, #3cfcdc, #3484d9);
+  text-decoration: none;
+  color: #000;
 }
 
-.endmsg{
+.start-screen h1, h2 {
+  color: DarkOrchid;
+}
+
+/* .board {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  text-align: center;
+
+  padding: 5px;
+  margin: 0 auto
+
+margin: auto;
+width: -moz-fit-content;
+width: -webkit-fit-content;
+width: fit-content;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+justify-items: center;
+} */
+.endmsg {
   text-align: center;
   color: Orchid;
   font-size: 48px;
@@ -43,12 +103,61 @@
 }
 
 .numbers {
-    display: grid;
-    position:absolute;
-    right: 220px;;
-    top: 178px;
-    grid-gap: 5px 5px;
-    grid-template-columns: repeat(3, 1fr);
-    width: 300px;
-    margin: 0 auto;
+  position: absolute;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 0 auto;
+}
+
+.board {
+  display: grid;
+  width: min-content;
+}
+
+@media only screen and (orientation: landscape) {
+  .board {
+    position: absolute;
+    grid-template-columns: repeat(9, 10vh);
+    grid-auto-rows: 8vh;
+    margin-top: 20%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .numbers {
+    grid-template-columns: repeat(3, 8vw);
+    grid-auto-rows: 7vw;
+    margin-top: 20%;
+    margin-left: 35%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@media only screen and (orientation: portrait) {
+  .board {
+    grid-template-columns: repeat(9, 10vw);
+    grid-auto-rows: 8vw;
+    position: absolute;
+    margin-top: 40%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .numbers {
+    grid-template-columns: repeat(3, 25vw);
+    grid-auto-rows: 14vw;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, 150%);
+  }
+}
+
+.board>div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
