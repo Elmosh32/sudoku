@@ -3,6 +3,7 @@
 body {
   /* height: 1200px; */
   overflow-y: scroll;
+  background-color:powderblue;
   scrollbar-color: rebeccapurple green;
   scrollbar-width: thin;
   margin: 0;
