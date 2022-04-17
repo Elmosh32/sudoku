@@ -83,7 +83,7 @@ function createNumbers() {
       numbersCounts[gameBoard.getVal(i) - 1]++;
 
   for (let i = 1; i <= 9; i++) {
-    numbers.push(new Number(i));
+    numbers.push(new NumberB(i));
     numbers[i - 1].amount = numbersCounts[i - 1];
   }
 
