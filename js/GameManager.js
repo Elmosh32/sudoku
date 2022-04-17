@@ -117,6 +117,7 @@ function createNumbersPanel() {
 
   delDiv.innerHTML = "delete";
   delDiv.setAttribute("class", "number");
+
   delDiv.onclick = deleteCell;
   delDiv.setAttribute("id", "cmdX");
   numbersDiv.append(delDiv);
@@ -135,10 +136,13 @@ function clickCell(e) {
 
   if (choosenCell != null) {
     for (let i = 0; i < 28; i++) {
+
       if (neighborsCell[i] == null)
         break;
+
       neighborsCell[i].classList.remove("clicked-cell-neighbors");
       neighborsCell[i].classList.remove("clicked-same-val");
+
     }
   }
 
@@ -494,6 +498,7 @@ function squresNeighbors(index) {
 function clickNumber(e) {
   let index;
   let indx;
+  // choosenCell = e.target;
 
   if (choosenCell == null)
     return;
@@ -508,7 +513,6 @@ function clickNumber(e) {
     choosenCell.firstChild.innerHTML = e.target.firstChild.innerHTML;
     index = getCellIndex();
     gameBoard.setVal(index, parseInt(choosenCell.firstChild.innerHTML));
-
     index = parseInt(e.target.firstChild.innerHTML);
     numbers[index - 1].increaseAmount();
     e.target.lastChild.innerHTML = numbers[index - 1].amount;
@@ -531,6 +535,7 @@ function getCellIndex() {
   for (let i = 0; i < boardDiv.childNodes.length; i++)
     if (boardDiv.childNodes[i] == choosenCell)
       return i;
+
 }
 
 
@@ -547,8 +552,8 @@ function deleteCell(e) {
   if (isDraftCell()) {
     clearDrafts();
   } else {
-    num = parseInt(choosenCell.innerHTML);
-    choosenCell.innerHTML = "";
+    num = parseInt(choosenCell.firstChild.textContent);
+    choosenCell.firstChild.textContent = "";
     index = getCellIndex();
     gameBoard.setVal(index, EMPTY);
 
@@ -561,6 +566,7 @@ function deleteCell(e) {
       }
     );
   }
+
 }
 
 
@@ -582,6 +588,7 @@ function toggleDraftCell() {
   } else {
     choosenCell.firstChild.style.diplay = "block";
     choosenCell.lastChild.style.display = "none";
+
   }
 }
 
