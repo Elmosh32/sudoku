@@ -27,7 +27,9 @@ body {
 .collapse, .navbar-collapse {
   margin-left: 16px;
 }
-
+.navbar{
+    width: 100%;
+}
 .container-fluid {
   padding-right: 0;
   padding-left: 0;
