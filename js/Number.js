@@ -1,4 +1,4 @@
-class Number {
+class NumberB {
 
   constructor(val) {
     this.val = val;
