@@ -1,7 +1,8 @@
 # Sudoku
 
 
-
-* Unordered sub-list. 
-* Unordered sub-list. 
-* Unordered sub-list. 
+---
+## Built With
+* JavaScript
+* HTML
+* CSS
