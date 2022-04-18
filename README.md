@@ -8,4 +8,4 @@
 * CSS
 
 ---
-[link](https://elmosh32.github.io/Sudoku/)
+[Sudoku Game](https://elmosh32.github.io/Sudoku/)
