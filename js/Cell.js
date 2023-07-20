@@ -1,11 +1,9 @@
 class Cell {
-
   constructor(val) {
     this.val = val;
     this.isDraft = false;
     this.isFixed = false;
   }
-
 
   render() {
     let cellDiv = document.createElement("div");
@@ -14,8 +12,9 @@ class Cell {
     let tblStr;
     cellDiv.setAttribute("class", "cell");
     cellNum.setAttribute("class", "cell-number");
-    if (this.isFixed == true)
+    if (this.isFixed == true) {
       cellNum.classList.add("cell-fixed");
+    }
 
     cellNum.innerHTML = this.val;
 
@@ -42,5 +41,4 @@ class Cell {
 
     return str;
   }
-
 }

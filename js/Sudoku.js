@@ -6,7 +6,6 @@ const EASY = 0,
 const EMPTY_CELLS = [42, 50, 55, 60];
 
 class Sudoku {
-
   constructor(level) {
     this.N = 9;
     this.level = level;
@@ -17,13 +16,13 @@ class Sudoku {
     this.generateGameBoard();
   }
 
-
   copyBoard() {
-    for (let i = 0; i < this.N; i++)
-      for (let j = 0; j < this.N; j++)
+    for (let i = 0; i < this.N; i++) {
+      for (let j = 0; j < this.N; j++) {
         this.gameBoard[i][j] = this.board[i][j];
+      }
+    }
   }
-
 
   generateGameBoard() {
     for (let i = 1; i <= EMPTY_CELLS[this.level]; i++) {
@@ -37,20 +36,19 @@ class Sudoku {
     }
   }
 
-
   createEmptyBoard() {
     let res = [];
 
     for (let i = 0; i < this.N; i++) {
       let row = [];
-      for (let j = 0; j < this.N; j++)
+      for (let j = 0; j < this.N; j++) {
         row.push(EMPTY);
+      }
       res.push(row);
     }
 
     return res;
   }
-
 
   createBoard(row, col) {
     let numbers = [];
@@ -60,25 +58,27 @@ class Sudoku {
       col = 0;
     }
 
-    if (row == this.N)
+    if (row == this.N) {
       return this.isLegal(this.board);
+    }
 
-    for (let i = 1; i <= this.N; i++)
+    for (let i = 1; i <= this.N; i++) {
       numbers.push(i);
+    }
     this.shuffle(numbers);
-
 
     for (let i = 0; i < numbers.length; i++) {
       this.board[row][col] = numbers[i];
-      if (this.isLegal(this.board))
-        if (this.createBoard(row, col + 1))
+      if (this.isLegal(this.board)) {
+        if (this.createBoard(row, col + 1)) {
           return true;
+        }
+      }
     }
 
     this.board[row][col] = EMPTY;
     return false;
   }
-
 
   shuffle(arr) {
     arr.forEach((element, i) => {
@@ -89,64 +89,66 @@ class Sudoku {
     });
   }
 
-
   isLegal(boardArr) {
-    return this.checkRows(boardArr) && this.checkCols(boardArr) &&
-      this.checkSquares(boardArr);
+    return (
+      this.checkRows(boardArr) &&
+      this.checkCols(boardArr) &&
+      this.checkSquares(boardArr)
+    );
   }
-
 
   isLegalcell(ind) {
     let row = Math.floor(ind / this.N);
     let col = ind % this.N;
-    if ((this.gameBoard[row][col]) != (this.board[row][col]))
+    if (this.gameBoard[row][col] != this.board[row][col]) {
       return false;
-    else
+    } else {
       return true;
+    }
   }
-
 
   checkRows(boardArr) {
-    return boardArr.every(row => this.isValidArr(row));
+    return boardArr.every((row) => this.isValidArr(row));
   }
-
 
   checkCols(boardArr) {
     for (let i = 0; i < this.N; i++) {
-      let col = boardArr.map(row => row[i]);
-      if (!this.isValidArr(col))
+      let col = boardArr.map((row) => row[i]);
+      if (!this.isValidArr(col)) {
         return false;
-    }
-    return true;
-  }
-
-
-  checkSquares(boardArr) {
-    for (let i = 0; i < this.N; i += 3) {
-      for (let j = 0; j < this.N; j += 3) {
-        let arr = [];
-        for (let k = i; k < i + 3; k++)
-          for (let w = j; w < j + 3; w++)
-            arr.push(boardArr[k][w]);
-        if (!this.isValidArr(arr))
-          return false;
       }
     }
     return true;
   }
 
+  checkSquares(boardArr) {
+    for (let i = 0; i < this.N; i += 3) {
+      for (let j = 0; j < this.N; j += 3) {
+        let arr = [];
+        for (let k = i; k < i + 3; k++) {
+          for (let w = j; w < j + 3; w++) {
+            arr.push(boardArr[k][w]);
+          }
+        }
+        if (!this.isValidArr(arr)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
 
   isValidArr(arr) {
     let a = [];
 
-    for (let i = 0; i <= this.N; i++)
+    for (let i = 0; i <= this.N; i++) {
       a.push(0);
+    }
 
-    arr.forEach(element => a[element]++);
+    arr.forEach((element) => a[element]++);
     a[0] = 0;
-    return a.every(element => element == 1 || element == EMPTY);
+    return a.every((element) => element == 1 || element == EMPTY);
   }
-
 
   getVal(ind) {
     let row = Math.floor(ind / this.N);
@@ -155,7 +157,6 @@ class Sudoku {
     return this.gameBoard[row][col];
   }
 
-
   setVal(ind, value) {
     let row = Math.floor(ind / this.N);
     let col = ind % this.N;
@@ -163,10 +164,9 @@ class Sudoku {
     this.gameBoard[row][col] = value;
   }
 
-
   done() {
     return this.board.every((row, i) =>
-      row.every((num, j) => num == this.gameBoard[i][j]));
+      row.every((num, j) => num == this.gameBoard[i][j])
+    );
   }
-
 }
