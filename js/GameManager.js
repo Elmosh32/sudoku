@@ -5,6 +5,7 @@ let cells;
 let isDraft;
 let level;
 let neighborsCell = [];
+let isDarkMode = false;
 
 function loadGame() {
   const startScreen = document.querySelector(".start-screen");
@@ -119,14 +120,13 @@ function createNumbersPanel() {
   });
 
   delDiv.innerHTML = "delete";
-  delDiv.setAttribute("class", "number");
-
+  delDiv.setAttribute("class", "number-panel cmd");
   delDiv.onclick = deleteCell;
   delDiv.setAttribute("id", "cmdX");
   numbersDiv.append(delDiv);
 
   editDiv.innerHTML = "draft";
-  editDiv.setAttribute("class", "number");
+  editDiv.setAttribute("class", "number-panel cmd");
   editDiv.setAttribute("id", "cmdDraft");
   editDiv.onclick = clickDraft;
   numbersDiv.append(editDiv);
@@ -215,6 +215,7 @@ function rowsColumnsNeighbors(index) {
 function clickNumber(e) {
   let index;
   let indx;
+  let prev;
   // choosenCell = e.target;
 
   if (choosenCell == null) {
@@ -231,15 +232,22 @@ function clickNumber(e) {
     toggleDraftCell();
     choosenCell.firstChild.innerHTML = e.target.firstChild.innerHTML;
     index = getCellIndex();
+    prev = gameBoard.getVal(index);
     gameBoard.setVal(index, parseInt(choosenCell.firstChild.innerHTML));
     index = parseInt(e.target.firstChild.innerHTML);
-    numbers[index - 1].increaseAmount();
-    e.target.lastChild.innerHTML = numbers[index - 1].amount;
 
     indx = getCellIndex();
     choosenCell.classList.remove("illegal-cell");
     if (gameBoard.isLegalcell(indx) == false) {
+      if (prev == gameBoard.getVal(indx)) {
+        numbers[index - 1].decreaseAmount();
+      }
       choosenCell.classList.add("illegal-cell");
+    } else {
+      if (prev != numbers[index - 1].val) {
+        numbers[index - 1].increaseAmount();
+        e.target.lastChild.innerHTML = numbers[index - 1].amount;
+      }
     }
 
     if (gameBoard.done()) {
@@ -266,6 +274,7 @@ function deleteCell(e) {
   if (choosenCell == null) {
     return;
   }
+
   choosenCell.classList.remove("clicked-cell");
   choosenCell.classList.remove("illegal-cell");
 
@@ -286,14 +295,25 @@ function deleteCell(e) {
   }
 }
 
+function toggleThemeMode() {
+  document.documentElement.setAttribute(
+    "data-force-color-mode",
+    isDarkMode ? "light" : "dark"
+  );
+  isDarkMode = !isDarkMode;
+}
+
 function clickDraft() {
   let draftDiv = document.getElementById("cmdDraft");
+
   if (isDraft) {
     draftDiv.classList.remove("draft-clicked");
+    draftDiv.classList.add("cmd");
     if (isEmptyCell()) {
       draftDiv.classList.remove("draft-disabled");
     }
   } else {
+    draftDiv.classList.remove("cmd");
     draftDiv.classList.add("draft-clicked");
   }
   isDraft = !isDraft;

@@ -1,5 +1,4 @@
 class NumberB {
-
   constructor(val) {
     this.val = val;
     this.amount = 0;
@@ -15,14 +14,14 @@ class NumberB {
 
   render() {
     let numDiv = document.createElement("div");
-    numDiv.setAttribute("class", "number");
+    numDiv.setAttribute("class", "number-panel");
 
     let numVal = document.createElement("div");
-    numVal.setAttribute("class", "number-val");
+    numVal.setAttribute("class", "number-panel-val");
     numVal.innerHTML = this.val;
 
     let numAmount = document.createElement("div");
-    numAmount.setAttribute("class", "number-amount");
+    numAmount.setAttribute("class", "number-panel-amount");
     numAmount.innerHTML = this.amount;
 
     numDiv.append(numVal);
@@ -30,5 +29,4 @@ class NumberB {
 
     return numDiv;
   }
-
 }
