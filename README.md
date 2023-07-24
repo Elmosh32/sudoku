@@ -12,4 +12,4 @@
 * CSS
 
 ---
-#### Deployed Website: [https://elmosh32.github.io/Sudoku/](https://elmosh32.github.io/Sudoku/)
+#### Deployed Website:
