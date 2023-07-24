@@ -1,4 +1,4 @@
-.number {
+.number-panel {
   position: relative;
   height: 100%;
   box-sizing: border-box;
@@ -14,11 +14,11 @@
   color: #0072e3;
   cursor: pointer;
   transform: translateZ(0);
-  transition: background-color .1s ease-in-out;
+  transition: background-color 0.1s ease-in-out;
   -webkit-tap-highlight-color: transparent;
 }
 
-.number {
+.number-panel {
   height: auto;
   flex-basis: 32%;
   margin: 1%;
@@ -27,30 +27,53 @@
   background-color: #eaeef4;
 }
 
-.number:hover {
-    display: grid;
-    border: 1px  solid black;
-    background-color: #dce3ed;
-    font-size: 24px;
-    text-align: center;
-    color: blue;
+/* .number-panel:nth-child(even) {
+  background-color: #aab6c7;
+  color: #0056ac;
 }
 
-.number-val {
-    font-size: 22px;
-    text-align: center;
-    pointer-events: none;
-    color: Fuchsia;
+.number-panel:nth-child(10) {
+  background-color: #eaeef4;
+} */
+
+.number-panel:hover {
+  display: grid;
+  border: 1px solid black;
+  background-color: #dce3ed;
+  font-size: 24px;
+  text-align: center;
+  color: blue;
 }
 
-.number-amount {
-    font-size: 14px;
-    text-align: end;
-    color: gray;
-    pointer-events: none;
+.number-panel-val {
+  position: absolute;
+  right: 50%;
+  font-size: 22px;
+  text-align: center;
+  pointer-events: none;
+  color: Fuchsia;
+}
+
+.number-panel-amount {
+  position: absolute;
+  font-size: 14px;
+  bottom: 0%;
+  right: 50%;
+  color: gray;
+  pointer-events: none;
 }
 
 .draft-clicked {
-    background-color: rgb(185, 182, 182);
-    text-shadow: 0px 1px 0px rgba(255,255,255,.5);
+  background-color: rgb(185, 182, 182);
+  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5);
+}
+
+.draft-disabled {
+  background-color: rgb(191, 44, 14);
+  text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.5);
+}
+
+.cmd {
+  background-color: #91bdfe;
+  color: #ffffff;
 }

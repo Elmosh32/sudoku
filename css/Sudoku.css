@@ -1,19 +1,32 @@
 @import url(https://fonts.googleapis.com/css?family=Pacifico);
 
-body {
-  /* height: 1200px; */
-  overflow-y: scroll;
-  background-color:powderblue;
-  scrollbar-color: rebeccapurple green;
-  scrollbar-width: thin;
-  margin: 0;
-  justify-content: center;
-  align-items: center;
-}
-
-.relative {
-  position: relative;
-  flex-wrap: wrap;
+@keyframes nav-bar-an {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  15% {
+    transform: translate3d(-5%, 0, 0);
+    color: #d5e4ff;
+  }
+  30% {
+    transform: translate3d(4%, 0, 0);
+    color: #bdd3fc;
+  }
+  45% {
+    transform: translate3d(-3%, 0, 0);
+    color: #a3c0f6;
+  }
+  60% {
+    transform: translate3d(2%, 0, 0);
+    color: #bdd3fc;
+  }
+  75% {
+    transform: translate3d(-1%, 0, 0);
+    color: #d5e4ff;
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 .navbar-brand {
@@ -25,7 +38,14 @@ body {
   line-height: 25px;
 }
 
-.collapse, .navbar-collapse {
+.navbar-brand:hover {
+  animation: nav-bar-an 1s;
+  text-shadow: black 5px 5px 0, 2px 8px 6px rgba(0, 0, 0, 0.2),
+    0px -5px 35px rgba(199, 179, 240, 0.3);
+}
+
+.collapse,
+.navbar-collapse {
   margin-left: 16px;
 }
 
@@ -33,7 +53,7 @@ body {
   padding-right: 0;
   padding-left: 0;
   margin-right: auto;
-  margin-left: auto
+  margin-left: auto;
 }
 
 .start-screen {
@@ -59,6 +79,7 @@ body {
   padding: 10px 20px 10px 20px;
   border: solid #00d9ff 2px;
   text-decoration: none;
+  transition: all 1s ease;
   /* margin-left: 200px; */
 }
 
@@ -71,94 +92,189 @@ body {
   background-image: linear-gradient(to bottom, #3cfcdc, #3484d9);
   text-decoration: none;
   color: #000;
+  transform: scale(1.2);
+  border-radius: 20px;
 }
 
-.start-screen h1, h2 {
+.start-screen h1,
+h2 {
   color: DarkOrchid;
 }
 
-/* .board {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(9, 1fr);
-  text-align: center;
-
-  padding: 5px;
-  margin: 0 auto
-
-margin: auto;
-width: -moz-fit-content;
-width: -webkit-fit-content;
-width: fit-content;
-top: 50%;
-left: 50%;
-transform: translate(-50%, -50%);
-justify-items: center;
-} */
 .endmsg {
   text-align: center;
   color: Orchid;
   font-size: 48px;
-  font-family: 'Syncopate', sans-serif;
+  font-family: "Syncopate", sans-serif;
   padding-bottom: 10px;
 }
 
+.game-container {
+  display: flex;
+  align-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* background-color: red; */
+  height: 90vh;
+  width: 100vw;
+  margin: 1em;
+}
+
 .numbers {
-  position: absolute;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  margin: 0 auto;
+  order: 1;
 }
 
 .board {
   display: grid;
-  width: min-content;
+  order: 0;
 }
 
-@media only screen and (orientation: landscape) {
+@media (orientation: landscape) {
   .board {
-    position: absolute;
-    grid-template-columns: repeat(9, 10vh);
+    grid-template-columns: repeat(9, 7.5vw);
     grid-auto-rows: 8vh;
-    margin-top: 20%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
   }
 
   .numbers {
-    grid-template-columns: repeat(3, 8vw);
-    grid-auto-rows: 7vw;
-    margin-top: 20%;
-    margin-left: 35%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    grid-template-columns: repeat(3, 8.5vw);
+    grid-auto-rows: 12vh;
   }
 }
 
-@media only screen and (orientation: portrait) {
+@media (orientation: portrait) {
   .board {
     grid-template-columns: repeat(9, 10vw);
-    grid-auto-rows: 8vw;
-    position: absolute;
-    margin-top: 40%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    grid-auto-rows: 6vh;
   }
 
   .numbers {
-    grid-template-columns: repeat(3, 25vw);
-    grid-auto-rows: 14vw;
-    top: 100%;
-    left: 50%;
-    transform: translate(-50%, 150%);
+    grid-template-columns: repeat(3, 20vw);
+    grid-auto-rows: 8vh;
   }
 }
 
-.board>div {
+.board > div {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  /* cursor: ; */
+  font-size: 22px;
+}
+
+input[type="radio"].easy {
+  accent-color: auto;
+}
+
+input[type="radio"].medium {
+  accent-color: blue;
+}
+
+input[type="radio"].hard {
+  accent-color: rgb(255, 0, 149);
+}
+
+input[type="radio"].evil {
+  accent-color: #ff0000;
+}
+
+:root,
+:root[data-force-color-mode="light"] {
+  color-scheme: light dark;
+  --primary: #b81577;
+  --secondary: #7b00ff;
+  --body-background-color: powderblue;
+  --header-background-color: #f5f5f5;
+  --p-text-color: white;
+  --toggle-background-color: rgb(255, 98, 0);
+  --dark-mode-sign: "☀️";
+}
+
+:root[data-force-color-mode="dark"] {
+  --primary: #78cdb6;
+  --secondary: #7b00ff;
+  --body-background-color: #121212;
+  --header-background-color: #1f1f1f;
+  --p-text-color: white;
+  --toggle-background-color: rgb(23, 2, 2);
+  --dark-mode-sign: "🌙";
+}
+
+body {
+  margin: 0 auto;
+  background-color: var(--body-background-color);
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--toggle-background-color);
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: rgba(252, 239, 0, 0.623);
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: var(--toggle-background-color);
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px var(--primary);
+}
+
+input:checked + .slider:before {
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.round::before {
+  content: var(--dark-mode-sign);
 }
