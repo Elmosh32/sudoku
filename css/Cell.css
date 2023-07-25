@@ -6,20 +6,20 @@
   white-space: pre;
 }
 
-.clicked-cell {
-  background-color: #33d7ff;
-  border-color: HotPink;
+/* .clicked-cell {
+  background-color: rgb(255, 228, 181);
+  border-color: MediumSlateBlue;
   border-width: 2px;
-}
+} */
 
 .clicked-same-val {
-  background-color: lightblue;
-  border-color: blue;
+  background-color: rgba(17, 178, 232, 0.75);
+  border-color: rgba(0, 0, 255, 0.484);
   border-width: 2px;
 }
 
 .clicked-cell-neighbors {
-  background-color: Moccasin;
+  background-color: rgba(255, 228, 181, 0.75);
   border-color: MediumSlateBlue;
   border-width: 2px;
 }
