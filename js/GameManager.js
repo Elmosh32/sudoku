@@ -137,6 +137,7 @@ function clickCell(e) {
   let index;
 
   choosenCell = e.target;
+
   if (choosenCell != null) {
     for (let i = 0; i < 28; i++) {
       if (neighborsCell[i] == null) break;
@@ -210,7 +211,12 @@ function rowsColumnsNeighbors(index) {
     }
   }
 
-  neighborsCell.forEach((cell) => cell.classList.add("clicked-cell-neighbors"));
+  const clickedCellIndex = neighborsCell.indexOf(boardDiv.childNodes[index]);
+  neighborsCell.forEach((cell) => {
+    if (cell !== neighborsCell[clickedCellIndex]) {
+      cell.classList.add("clicked-cell-neighbors");
+    }
+  });
 }
 
 function clickNumber(e) {
@@ -220,7 +226,6 @@ function clickNumber(e) {
     return;
   }
 
-  choosenCell.classList.remove("clicked-cell");
   if (isDraft) {
     if (isEmptyCell()) {
       toggleDraftCell();
@@ -269,7 +274,6 @@ function deleteCell(e) {
     return;
   }
 
-  choosenCell.classList.remove("clicked-cell");
   choosenCell.classList.remove("illegal-cell");
 
   if (isDraftCell()) {
