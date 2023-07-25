@@ -138,15 +138,6 @@ function clickCell(e) {
 
   choosenCell = e.target;
 
-  if (choosenCell != null) {
-    for (let i = 0; i < 28; i++) {
-      if (neighborsCell[i] == null) break;
-
-      neighborsCell[i].classList.remove("clicked-cell-neighbors");
-      neighborsCell[i].classList.remove("clicked-same-val");
-    }
-  }
-
   index = getCellIndex();
   getSquareStartIndex(index);
   rowsColumnsNeighbors(index);
