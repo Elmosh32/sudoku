@@ -157,6 +157,13 @@ class Sudoku {
     return this.gameBoard[row][col];
   }
 
+  getCorrectVal(ind) {
+    let row = Math.floor(ind / this.N);
+    let col = ind % this.N;
+
+    return this.board[row][col];
+  }
+
   setVal(ind, value) {
     let row = Math.floor(ind / this.N);
     let col = ind % this.N;
