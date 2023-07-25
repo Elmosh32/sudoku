@@ -239,14 +239,14 @@ function clickNumber(e) {
     indx = getCellIndex();
     choosenCell.classList.remove("illegal-cell");
     if (gameBoard.isLegalcell(indx) == false) {
-      if (prev == gameBoard.getVal(indx)) {
-        numbers[index - 1].decreaseAmount();
+      if (prev == gameBoard.getCorrectVal(indx)) {
+        decreaseAmountVal(prev);
       }
       choosenCell.classList.add("illegal-cell");
     } else {
       if (prev != numbers[index - 1].val) {
-        numbers[index - 1].increaseAmount();
-        e.target.lastChild.innerHTML = numbers[index - 1].amount;
+        increaseAmountVal(e, index);
+        sameVal(numbers[index - 1].val, indx);
       }
     }
 
@@ -270,6 +270,7 @@ function getCellIndex() {
 function deleteCell(e) {
   let num;
   let index;
+  let correctNum;
 
   if (choosenCell == null) {
     return;
@@ -284,15 +285,29 @@ function deleteCell(e) {
     num = parseInt(choosenCell.firstChild.textContent);
     choosenCell.firstChild.textContent = "";
     index = getCellIndex();
+    correctNum = gameBoard.isLegalcell(index);
     gameBoard.setVal(index, EMPTY);
 
-    document.getElementsByClassName("numbers")[0].childNodes.forEach((n) => {
-      if (n.firstChild.innerHTML == num) {
-        numbers[num - 1].decreaseAmount();
-        n.lastChild.innerHTML = numbers[num - 1].amount;
-      }
-    });
+    if (!correctNum) {
+      return;
+    }
+
+    decreaseAmountVal(num);
   }
+}
+
+function decreaseAmountVal(num) {
+  document.getElementsByClassName("numbers")[0].childNodes.forEach((n) => {
+    if (n.firstChild.innerHTML == num) {
+      numbers[num - 1].decreaseAmount();
+      n.lastChild.innerHTML = numbers[num - 1].amount;
+    }
+  });
+}
+
+function increaseAmountVal(e, index) {
+  numbers[index - 1].increaseAmount();
+  e.target.lastChild.innerHTML = numbers[index - 1].amount;
 }
 
 function toggleThemeMode() {
