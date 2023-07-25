@@ -134,6 +134,8 @@ function createNumbersPanel() {
 
 function clickCell(e) {
   let draftDiv = document.getElementById("cmdDraft");
+  let index;
+
   choosenCell = e.target;
   if (choosenCell != null) {
     for (let i = 0; i < 28; i++) {
@@ -144,7 +146,7 @@ function clickCell(e) {
     }
   }
 
-  let index = getCellIndex();
+  index = getCellIndex();
   getSquareStartIndex(index);
   rowsColumnsNeighbors(index);
 
@@ -167,7 +169,6 @@ function clearMarks() {
 }
 
 function sameVal(cellVAL, index) {
-  // clearMarks();
   let boardDiv = document.getElementsByClassName("board")[0];
 
   for (let i = 0; i < 81; i++) {
@@ -213,10 +214,7 @@ function rowsColumnsNeighbors(index) {
 }
 
 function clickNumber(e) {
-  let index;
-  let indx;
-  let prev;
-  // choosenCell = e.target;
+  let currVal, prevVal, index;
 
   if (choosenCell == null) {
     return;
@@ -232,21 +230,20 @@ function clickNumber(e) {
     toggleDraftCell();
     choosenCell.firstChild.innerHTML = e.target.firstChild.innerHTML;
     index = getCellIndex();
-    prev = gameBoard.getVal(index);
+    prevVal = gameBoard.getVal(index);
     gameBoard.setVal(index, parseInt(choosenCell.firstChild.innerHTML));
-    index = parseInt(e.target.firstChild.innerHTML);
+    currVal = parseInt(e.target.firstChild.innerHTML);
 
-    indx = getCellIndex();
     choosenCell.classList.remove("illegal-cell");
-    if (gameBoard.isLegalcell(indx) == false) {
-      if (prev == gameBoard.getCorrectVal(indx)) {
-        decreaseAmountVal(prev);
+    if (gameBoard.isLegalcell(index) == false) {
+      if (prevVal == gameBoard.getCorrectVal(index)) {
+        decreaseAmountVal(prevVal);
       }
       choosenCell.classList.add("illegal-cell");
     } else {
-      if (prev != numbers[index - 1].val) {
-        increaseAmountVal(e, index);
-        sameVal(numbers[index - 1].val, indx);
+      if (prevVal != numbers[currVal - 1].val) {
+        increaseAmountVal(e, currVal);
+        sameVal(numbers[currVal - 1].val, index);
       }
     }
 
@@ -254,8 +251,6 @@ function clickNumber(e) {
       endGame();
     }
   }
-
-  // choosenCell = null;
 }
 
 function getCellIndex() {
@@ -268,9 +263,7 @@ function getCellIndex() {
 }
 
 function deleteCell(e) {
-  let num;
-  let index;
-  let correctNum;
+  let num, index, validNum;
 
   if (choosenCell == null) {
     return;
@@ -285,10 +278,10 @@ function deleteCell(e) {
     num = parseInt(choosenCell.firstChild.textContent);
     choosenCell.firstChild.textContent = "";
     index = getCellIndex();
-    correctNum = gameBoard.isLegalcell(index);
+    validNum = gameBoard.isLegalcell(index);
     gameBoard.setVal(index, EMPTY);
 
-    if (!correctNum) {
+    if (!validNum) {
       return;
     }
 
@@ -346,19 +339,11 @@ function toggleDraftCell() {
 
 function assignDraft(num) {
   let numbersTable = choosenCell.lastChild.getElementsByTagName("td");
-  let numInt = parseInt(num);
-  let i = 0;
 
-  for (let count = 1; i < numbersTable.length; i++, count++) {
-    if (count == numInt) {
-      break;
-    }
-  }
-
-  if (numbersTable[i].innerHTML == "") {
-    numbersTable[i].innerHTML = num;
+  if (numbersTable[num - 1].innerHTML == "") {
+    numbersTable[num - 1].innerHTML = num;
   } else {
-    numbersTable[i].innerHTML = "";
+    numbersTable[num - 1].innerHTML = "";
   }
 }
 
@@ -370,6 +355,7 @@ function isEmptyCell() {
     return false;
   }
 }
+
 function isDraftCell() {
   return choosenCell.lastChild.style.display == "block";
 }
