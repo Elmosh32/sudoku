@@ -111,7 +111,7 @@ h2 {
 
 .game-container {
   display: flex;
-  align-content: center;
+  align-content: flex-start;
   align-items: center;
   flex-wrap: wrap;
   justify-content: center;
