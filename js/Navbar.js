@@ -20,10 +20,10 @@ var navbarItems = `<div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
           <ul class="navbar-nav ms-auto text-start">
             <li class="nav-item">
-              <a class="nav-link" href="Sudoku.html"> New Game&nbsp </a>
+              <a class="nav-link" href="../Sudoku.html"> New Game&nbsp </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="./html/Info.html">
+              <a class="nav-link" href="../html/Info.html">
                 Info&nbsp
                 <i
                   class="fa-solid fa-circle-info"
