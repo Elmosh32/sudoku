@@ -27,7 +27,7 @@ var navbarItems = `<div class="container-fluid">
                 Info&nbsp
                 <i
                   class="fa-solid fa-circle-info"
-                  style="color: dodgerblue"
+                  style="color: dodgerblue; margin-right:10px;"
                 ></i>
               </a>
             </li>
