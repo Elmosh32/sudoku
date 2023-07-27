@@ -1,6 +1,6 @@
 var navbarItems = `<div class="container-fluid">
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-        <a class="navbar-brand navbar brand sudoku-txt" href="index.html">
+        <a class="navbar-brand navbar brand sudoku-txt" href="../html/Sudoku.html">
           Sudoku
           <i class="fa-solid fa-chess-board" style="color: #2fde7c"></i>
           Online
@@ -20,7 +20,7 @@ var navbarItems = `<div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
           <ul class="navbar-nav ms-auto text-start">
             <li class="nav-item">
-              <a class="nav-link" href="index.html"> New Game&nbsp </a>
+              <a class="nav-link" href="../html/Sudoku.html"> New Game&nbsp </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="../html/Info.html">
