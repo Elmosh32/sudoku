@@ -23,7 +23,7 @@ var navbarItems = `<div class="container-fluid">
               <a class="nav-link" href="Sudoku.html"> New Game&nbsp </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="Info.html">
+              <a class="nav-link" href="./html/Info.html">
                 Info&nbsp
                 <i
                   class="fa-solid fa-circle-info"
