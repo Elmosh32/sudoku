@@ -298,14 +298,6 @@ function increaseAmountVal(e, index) {
   e.target.lastChild.innerHTML = numbers[index - 1].amount;
 }
 
-function toggleThemeMode() {
-  document.documentElement.setAttribute(
-    "data-force-color-mode",
-    isDarkMode ? "light" : "dark"
-  );
-  isDarkMode = !isDarkMode;
-}
-
 function clickDraft() {
   let draftDiv = document.getElementById("cmdDraft");
 
@@ -372,4 +364,45 @@ function endGame() {
   document.getElementsByClassName("board")[0].style["pointer-events"] = "none";
   document.getElementsByClassName("numbers")[0].style["pointer-events"] =
     "none";
+}
+
+function toggleThemeMode() {
+  isDarkMode = !isDarkMode;
+  localStorage.setItem("isDarkMode", isDarkMode.toString());
+  document.documentElement.setAttribute(
+    "data-force-color-mode",
+    isDarkMode ? "dark" : "light"
+  );
+  changeButtonsClass();
+}
+
+function checkThemeMode() {
+  isDarkMode = localStorage.getItem("isDarkMode") === "true";
+  if (isDarkMode) {
+    document.documentElement.setAttribute("data-force-color-mode", "dark");
+    document.querySelector(".switch input").checked = true;
+    changeButtonsClass();
+  } else {
+    document.documentElement.setAttribute("data-force-color-mode", "light");
+    document.querySelector(".switch input").checked = false;
+  }
+}
+function changeButtonsClass() {
+  const buttons = [
+    { id: "btnEasy", color: "success" },
+    { id: "btnMedium", color: "info" },
+    { id: "btnHard", color: "warning" },
+    { id: "btnEvil", color: "danger" },
+  ];
+
+  buttons.forEach((button) => {
+    const btnElement = document.getElementById(button.id);
+    if (isDarkMode) {
+      btnElement.classList.add(`btn-outline-${button.color}`);
+      btnElement.classList.remove(`btn-${button.color}`);
+    } else {
+      btnElement.classList.remove(`btn-outline-${button.color}`);
+      btnElement.classList.add(`btn-${button.color}`);
+    }
+  });
 }
