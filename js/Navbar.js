@@ -1,6 +1,6 @@
 var navbarItems = `<div class="container-fluid">
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-        <a class="navbar-brand navbar brand sudoku-txt" href="./sudoku.html">
+        <a class="navbar-brand navbar brand sudoku-txt" href="Sudoku.html">
           Sudoku
           <i class="fa-solid fa-chess-board" style="color: #2fde7c"></i>
           Online
@@ -20,10 +20,10 @@ var navbarItems = `<div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
           <ul class="navbar-nav ms-auto text-start">
             <li class="nav-item">
-              <a class="nav-link" href="./sudoku.html"> New Game&nbsp </a>
+              <a class="nav-link" href="Sudoku.html"> New Game&nbsp </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="./info.html">
+              <a class="nav-link" href="Info.html">
                 Info&nbsp
                 <i
                   class="fa-solid fa-circle-info"
@@ -32,7 +32,7 @@ var navbarItems = `<div class="container-fluid">
               </a>
             </li>
             <li class="nav-item">
-              <p class="nav-link" style="all: unset; color: #00ff73">
+              <p class="nav-link" style="all: unset; color: white">
                 DarkMode
               </p>
               <label class="switch nav-link">
