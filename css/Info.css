@@ -1,0 +1,40 @@
+.info {
+  max-width: 75vw;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.info > h1 {
+  font-family: "Syncopate", sans-serif;
+  font-size: 34px;
+  font-weight: bold;
+  color: var(--header-color);
+  margin: 20px 0;
+  text-align: center;
+}
+
+.info > p {
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  line-height: 1.6;
+  text-align: justify;
+  color: var(--p-text-color);
+}
+
+strong {
+  font-weight: bold;
+}
+
+.info > ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.info > ul > li {
+  font-family: Arial, sans-serif;
+  font-size: 24px;
+  line-height: 1.6;
+  color: var(--li-text-color);
+  background-color: var(--body-background-color);
+  margin-bottom: 10px;
+}

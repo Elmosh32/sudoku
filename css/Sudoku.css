@@ -98,7 +98,7 @@
 
 .start-screen h1,
 h2 {
-  color: DarkOrchid;
+  color: var(--header-color);
 }
 
 .endmsg {
@@ -115,6 +115,7 @@ h2 {
   align-items: center;
   flex-wrap: wrap;
   justify-content: center;
+  /* background-color: red; */
   gap: 10px;
   height: 90vh;
   width: 100vw;
@@ -123,7 +124,6 @@ h2 {
 
 .numbers {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
   order: 1;
 }
 
@@ -171,40 +171,26 @@ h2 {
   font-size: 22px;
 }
 
-input[type="radio"].easy {
-  accent-color: auto;
-}
-
-input[type="radio"].medium {
-  accent-color: blue;
-}
-
-input[type="radio"].hard {
-  accent-color: rgb(255, 0, 149);
-}
-
-input[type="radio"].evil {
-  accent-color: #ff0000;
-}
-
 :root,
 :root[data-force-color-mode="light"] {
   color-scheme: light dark;
   --primary: #b81577;
-  --secondary: #7b00ff;
   --body-background-color: powderblue;
   --header-background-color: #f5f5f5;
-  --p-text-color: white;
+  --header-color: #1a5276;
+  --p-text-color: #4a4a4a;
+  --li-text-color: #884ea0;
   --toggle-background-color: rgb(255, 98, 0);
   --dark-mode-sign: "☀️";
 }
 
 :root[data-force-color-mode="dark"] {
   --primary: #78cdb6;
-  --secondary: #7b00ff;
   --body-background-color: #121212;
   --header-background-color: #1f1f1f;
-  --p-text-color: white;
+  --header-color: #2fde7c;
+  --p-text-color: #eaeaea;
+  --li-text-color: #f5f5f5;
   --toggle-background-color: rgb(23, 2, 2);
   --dark-mode-sign: "🌙";
 }
