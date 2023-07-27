@@ -1,6 +1,6 @@
 var navbarItems = `<div class="container-fluid">
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-        <a class="navbar-brand navbar brand sudoku-txt" href="Sudoku.html">
+        <a class="navbar-brand navbar brand sudoku-txt" href="index.html">
           Sudoku
           <i class="fa-solid fa-chess-board" style="color: #2fde7c"></i>
           Online
