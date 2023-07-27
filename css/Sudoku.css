@@ -80,7 +80,7 @@
   border: solid #00d9ff 2px;
   text-decoration: none;
   transition: all 1s ease;
-  /* margin-left: 200px; */
+  margin-top: 8px;
 }
 
 #cmdStart:hover {
@@ -165,8 +165,9 @@ h2 {
 .container {
   display: block;
   position: relative;
-  padding-left: 35px;
-  margin-bottom: 12px;
+  align-items: center;
+  /* padding-left: 35px;
+  margin-bottom: 12px; */
   /* cursor: ; */
   font-size: 22px;
 }
