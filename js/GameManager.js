@@ -2,10 +2,11 @@ let gameBoard;
 let numbers;
 let choosenCell;
 let cells;
+let isDarkMode;
 let isDraft;
 let level;
-let neighborsCell = [];
-let isDarkMode = false;
+let neighborsCells = [];
+let sameValCells = [];
 
 function loadGame() {
   const startScreen = document.querySelector(".start-screen");
@@ -17,6 +18,7 @@ function loadGame() {
   createGUI();
   chosenCell = null;
   isDraft = false;
+  isDarkMode = false;
 }
 
 function clickStart() {
@@ -55,12 +57,12 @@ function createBoard() {
   cells.forEach((cell, i) => {
     const cellDiv = cell.render();
 
-    if (i % 3 === 0) cellDiv.style["border-left"] = "3px solid black";
-    if (Math.floor(i / 9) % 3 === 0)
+    if (i % BOX_SIZE === 0) cellDiv.style["border-left"] = "3px solid black";
+    if (Math.floor(i / GRID_SIZE) % BOX_SIZE === 0)
       cellDiv.style["border-top"] = "3px solid black";
     if (i <= 80 && i >= 72) cellDiv.style["border-bottom"] = "3px solid black";
     if (i === right) {
-      right += 9;
+      right += GRID_SIZE;
       cellDiv.style["border-right"] = "3px solid black";
     }
 
@@ -79,7 +81,7 @@ function createNumbers() {
   numbers = [];
   let numbersCounts = [];
 
-  for (let i = 0; i < 9; i++) {
+  for (let i = 0; i < GRID_SIZE; i++) {
     numbersCounts.push(0);
   }
 
@@ -87,7 +89,7 @@ function createNumbers() {
     if (gameBoard.getVal(i) != EMPTY) numbersCounts[gameBoard.getVal(i) - 1]++;
   }
 
-  for (let i = 1; i <= 9; i++) {
+  for (let i = 1; i <= GRID_SIZE; i++) {
     numbers.push(new NumberB(i));
     numbers[i - 1].amount = numbersCounts[i - 1];
   }
@@ -139,7 +141,6 @@ function clickCell(e) {
   choosenCell = e.target;
 
   index = getCellIndex();
-  getSquareStartIndex(index);
   rowsColumnsNeighbors(index);
 
   if (isEmptyCell()) {
@@ -148,16 +149,29 @@ function clickCell(e) {
     draftDiv.classList.add("draft-disabled");
   }
 
-  if (choosenCell.textContent != " ") {
+  if (choosenCell.textContent.trim()) {
     sameVal(choosenCell.textContent, index);
   }
 }
 
 function clearMarks() {
-  neighborsCell.forEach((cell) => {
-    cell.classList.remove("clicked-same-val", "clicked-cell-neighbors");
+  removeSameVal();
+  removeNeighbors();
+
+  neighborsCells = [];
+  sameValCells = [];
+}
+
+function removeSameVal() {
+  sameValCells.forEach((cell) => {
+    cell.classList.remove("clicked-same-val");
   });
-  neighborsCell = [];
+}
+
+function removeNeighbors() {
+  neighborsCells.forEach((cell) => {
+    cell.classList.remove("clicked-cell-neighbors");
+  });
 }
 
 function sameVal(cellVAL, index) {
@@ -165,46 +179,50 @@ function sameVal(cellVAL, index) {
 
   for (let i = 0; i < 81; i++) {
     if (cellVAL == boardDiv.childNodes[i].textContent && index !== i) {
-      neighborsCell.push(boardDiv.childNodes[i]);
+      sameValCells.push(boardDiv.childNodes[i]);
     }
   }
 
-  neighborsCell.forEach((cell) => cell.classList.add("clicked-same-val"));
+  sameValCells.forEach((cell) => cell.classList.add("clicked-same-val"));
 }
 
 function getRow(index) {
-  return Math.floor(index / 9);
+  return Math.floor(index / GRID_SIZE);
 }
 
 function getColumn(index) {
-  return index % 9;
+  return index % GRID_SIZE;
 }
 
 function getSquareStartIndex(index) {
   const row = getRow(index);
   const col = getColumn(index);
-  return 27 * Math.floor(row / 3) + 3 * Math.floor(col / 3);
+  return (
+    27 * Math.floor(row / BOX_SIZE) + BOX_SIZE * Math.floor(col / BOX_SIZE)
+  );
 }
 
 function rowsColumnsNeighbors(index) {
   clearMarks();
   let boardDiv = document.getElementsByClassName("board")[0];
 
-  for (let i = 0; i < 9; i++) {
-    neighborsCell.push(boardDiv.childNodes[getRow(index) * 9 + i]);
-    neighborsCell.push(boardDiv.childNodes[i * 9 + getColumn(index)]);
+  for (let i = 0; i < GRID_SIZE; i++) {
+    neighborsCells.push(boardDiv.childNodes[getRow(index) * GRID_SIZE + i]);
+    neighborsCells.push(boardDiv.childNodes[i * GRID_SIZE + getColumn(index)]);
   }
 
   const squareStartIndex = getSquareStartIndex(index);
-  for (let i = 0; i < 3; i++) {
-    for (let j = 0; j < 3; j++) {
-      neighborsCell.push(boardDiv.childNodes[squareStartIndex + i * 9 + j]);
+  for (let i = 0; i < BOX_SIZE; i++) {
+    for (let j = 0; j < BOX_SIZE; j++) {
+      neighborsCells.push(
+        boardDiv.childNodes[squareStartIndex + i * GRID_SIZE + j]
+      );
     }
   }
 
-  const clickedCellIndex = neighborsCell.indexOf(boardDiv.childNodes[index]);
-  neighborsCell.forEach((cell) => {
-    if (cell !== neighborsCell[clickedCellIndex]) {
+  const clickedCellIndex = neighborsCells.indexOf(boardDiv.childNodes[index]);
+  neighborsCells.forEach((cell) => {
+    if (cell !== neighborsCells[clickedCellIndex]) {
       cell.classList.add("clicked-cell-neighbors");
     }
   });
@@ -251,6 +269,7 @@ function clickNumber(e) {
 
 function getCellIndex() {
   let boardDiv = document.getElementsByClassName("board")[0];
+
   for (let i = 0; i < boardDiv.childNodes.length; i++) {
     if (boardDiv.childNodes[i] == choosenCell) {
       return i;
@@ -275,6 +294,7 @@ function deleteCell(e) {
     index = getCellIndex();
     validNum = gameBoard.isLegalcell(index);
     gameBoard.setVal(index, EMPTY);
+    removeSameVal();
 
     if (!validNum) {
       return;
@@ -336,6 +356,7 @@ function assignDraft(num) {
 
 function isEmptyCell() {
   index = getCellIndex();
+
   if (gameBoard.getVal(index) == 0) {
     return true;
   } else {
@@ -373,7 +394,9 @@ function toggleThemeMode() {
     "data-force-color-mode",
     isDarkMode ? "dark" : "light"
   );
-  changeButtonsClass();
+  if (window.location.href.includes("sudoku.html")) {
+    changeButtonsClass();
+  }
 }
 
 function checkThemeMode() {
@@ -381,12 +404,15 @@ function checkThemeMode() {
   if (isDarkMode) {
     document.documentElement.setAttribute("data-force-color-mode", "dark");
     document.querySelector(".switch input").checked = true;
-    changeButtonsClass();
+    if (window.location.href.includes("sudoku.html")) {
+      changeButtonsClass();
+    }
   } else {
     document.documentElement.setAttribute("data-force-color-mode", "light");
     document.querySelector(".switch input").checked = false;
   }
 }
+
 function changeButtonsClass() {
   const buttons = [
     { id: "btnEasy", color: "success" },

@@ -4,10 +4,12 @@ const EASY = 0,
   HARD = 2,
   EVIL = 3;
 const EMPTY_CELLS = [42, 50, 55, 60];
+const GRID_SIZE = 9;
+const BOX_SIZE = 3;
 
 class Sudoku {
   constructor(level) {
-    this.N = 9;
+    this.N = GRID_SIZE;
     this.level = level;
     this.board = this.createEmptyBoard();
     this.createBoard(0, 0);
@@ -122,11 +124,11 @@ class Sudoku {
   }
 
   checkSquares(boardArr) {
-    for (let i = 0; i < this.N; i += 3) {
-      for (let j = 0; j < this.N; j += 3) {
+    for (let i = 0; i < this.N; i += BOX_SIZE) {
+      for (let j = 0; j < this.N; j += BOX_SIZE) {
         let arr = [];
-        for (let k = i; k < i + 3; k++) {
-          for (let w = j; w < j + 3; w++) {
+        for (let k = i; k < i + BOX_SIZE; k++) {
+          for (let w = j; w < j + BOX_SIZE; w++) {
             arr.push(boardArr[k][w]);
           }
         }

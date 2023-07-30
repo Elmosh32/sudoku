@@ -32,9 +32,6 @@ var navbarItems = `<div class="container-fluid">
               </a>
             </li>
             <li class="nav-item">
-              <p class="nav-link" style="all: unset; color: white">
-                DarkMode
-              </p>
               <label class="switch nav-link">
                 <input type="checkbox" onclick="toggleThemeMode()" />
                 <span class="slider round"></span>

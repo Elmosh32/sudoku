@@ -10,6 +10,7 @@ class Cell {
     let cellNum = document.createElement("div");
     let cellTable;
     let tblStr;
+
     cellDiv.setAttribute("class", "cell");
     cellNum.setAttribute("class", "cell-number");
     if (this.isFixed == true) {
@@ -39,6 +40,6 @@ class Cell {
       str += "</tr>";
     }
 
-    return str;
+    return `<table class="cell-table">${str}</table>`;
   }
 }
