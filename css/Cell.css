@@ -61,8 +61,9 @@
   }
 }
 
-/* .draft {
-  display: grid;
-  grid-template-columns: 0.1fr 0.1fr 0.1fr;
-  grid-template-rows: 0.1fr 0.1fr 0.1fr;
-} */
+@media (width < 400px) {
+  .cell-table {
+    font-size: 0.5vh;
+  }
+}
+
