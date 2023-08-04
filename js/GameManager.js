@@ -7,6 +7,18 @@ let isDraft;
 let level;
 let neighborsCells = [];
 let sameValCells = [];
+let validCells = BOARD_SIZE;
+
+let soundOn = true;
+const incorrect = new Audio("../sound/572936__bloodpixelhero__error.wav");
+const correct = new Audio("../sound/476178__unadamlar__correct-choice.wav");
+const areaCompleted = new Audio("../sound/531510__eponn__correct-blips.wav");
+const winSound = new Audio("../sound/668436__david819__win.mp3");
+
+incorrect.load();
+correct.load();
+areaCompleted.load();
+winSound.load();
 
 function loadGame() {
   const startScreen = document.querySelector(".start-screen");
@@ -19,6 +31,7 @@ function loadGame() {
   chosenCell = null;
   isDraft = false;
   isDarkMode = false;
+  validCells -= EMPTY_CELLS[level];
 }
 
 function clickStart() {
@@ -228,9 +241,122 @@ function rowsColumnsNeighbors(index) {
   });
 }
 
+function clearAnimationClasses() {
+  neighborsCells.forEach((cell) => {
+    cell.classList.remove("active-box", "active-column", "active-row");
+  });
+}
+
+function activeRowAnim() {
+  for (let i = 0; i < GRID_SIZE; i++) {
+    if (gameBoard.getVal(getRow(index) * GRID_SIZE + i) == EMPTY) {
+      return false;
+    }
+  }
+
+  let boardDiv = document.getElementsByClassName("board")[0];
+  let rowCells = [];
+  for (let i = 0; i < GRID_SIZE; i++) {
+    rowCells.push(boardDiv.childNodes[getRow(index) * GRID_SIZE + i]);
+  }
+
+  animateCellsFromOutermost(rowCells, "active-row");
+
+  return true;
+}
+
+function activeColAnim() {
+  for (let i = 0; i < GRID_SIZE; i++) {
+    if (gameBoard.getVal(i * GRID_SIZE + getColumn(index)) == EMPTY) {
+      return false;
+    }
+  }
+
+  let boardDiv = document.getElementsByClassName("board")[0];
+  let colCells = [];
+  for (let i = 0; i < GRID_SIZE; i++) {
+    colCells.push(boardDiv.childNodes[i * GRID_SIZE + getColumn(index)]);
+  }
+
+  animateCellsFromOutermost(colCells, "active-column");
+
+  return true;
+}
+
+function activeBoxAnim() {
+  const squareStartIndex = getSquareStartIndex(index);
+  for (let i = 0; i < BOX_SIZE; i++) {
+    for (let j = 0; j < BOX_SIZE; j++) {
+      if (gameBoard.getVal(squareStartIndex + i * GRID_SIZE + j) == EMPTY) {
+        return false;
+      }
+    }
+  }
+
+  let boardDiv = document.getElementsByClassName("board")[0];
+  let boxCells = [];
+  for (let i = 0; i < BOX_SIZE; i++) {
+    for (let j = 0; j < BOX_SIZE; j++) {
+      boxCells.push(boardDiv.childNodes[squareStartIndex + i * GRID_SIZE + j]);
+    }
+  }
+
+  animateCells(boxCells, "active-box");
+
+  return true;
+}
+
+function animateCellsFromOutermost(cells, animationClass) {
+  const animationDuration = 255;
+  const middleIndex = Math.floor(cells.length / 2);
+
+  for (let i = 0; i < middleIndex; i++) {
+    setTimeout(() => {
+      cells[i].classList.add(animationClass);
+    }, animationDuration * i);
+  }
+
+  for (let i = cells.length - 1; i >= middleIndex; i--) {
+    setTimeout(() => {
+      cells[i].classList.add(animationClass);
+    }, animationDuration * (cells.length - i));
+  }
+  cells[middleIndex].classList.add(animationClass);
+}
+
+function animateCells(cells, animationClass) {
+  const animationDuration = 255;
+  const middleIndex = Math.floor(GRID_SIZE / 2);
+
+  cells[middleIndex].classList.add(animationClass);
+  for (let i = 0; i <= middleIndex - 1; i++) {
+    setTimeout(() => {
+      cells[i].classList.add(animationClass);
+    }, animationDuration * (middleIndex - i));
+  }
+
+  for (let i = GRID_SIZE - 1; i >= middleIndex + 1; i--) {
+    setTimeout(() => {
+      cells[i].classList.add(animationClass);
+    }, animationDuration * (i - middleIndex));
+  }
+
+  // for (let i = middleIndex - 1; i >= 0; i--) {
+  //   setTimeout(() => {
+  //     cells[i].classList.add(animationClass);
+  //   }, animationDuration * (middleIndex - i));
+  // }
+
+  // for (let i = middleIndex + 1; i < cells.length; i++) {
+  //   setTimeout(() => {
+  //     cells[i].classList.add(animationClass);
+  //   }, animationDuration * (i - middleIndex));
+  // }
+}
+
 function clickNumber(e) {
   let currVal, prevVal, index;
-
+  let validArea = false;
   if (choosenCell == null) {
     return;
   }
@@ -254,15 +380,43 @@ function clickNumber(e) {
         decreaseAmountVal(prevVal);
       }
       choosenCell.classList.add("illegal-cell");
+      if (soundOn) {
+        incorrect.play();
+      }
     } else {
       if (prevVal != numbers[currVal - 1].val) {
         increaseAmountVal(e, currVal);
+        validCells++;
+        if (activeBoxAnim()) {
+          validArea = true;
+        }
+        if (activeColAnim()) {
+          validArea = true;
+        }
+        if (activeRowAnim()) {
+          validArea = true;
+        }
+
+        if (validArea) {
+          setTimeout(clearAnimationClasses, 1300);
+          if (soundOn) {
+            areaCompleted.play();
+          }
+        }
         sameVal(numbers[currVal - 1].val, index);
+
+        if (soundOn) {
+          correct.play();
+        }
       }
     }
 
-    if (gameBoard.done()) {
+    if (validCells == BOARD_SIZE) {
       endGame();
+
+      if (soundOn) {
+        winSound.play();
+      }
     }
   }
 }
@@ -399,6 +553,19 @@ function toggleThemeMode() {
   }
 }
 
+document.addEventListener("DOMContentLoaded", function () {
+  const speakerIcon = document.getElementById("speakerIcon");
+  speakerIcon.addEventListener("click", toggleSound);
+});
+
+function toggleSound(e) {
+  e.preventDefault();
+  const speakerIcon = document.getElementById("speakerIcon");
+  speakerIcon.classList.toggle("mute");
+
+  soundOn = !soundOn;
+}
+
 function checkThemeMode() {
   isDarkMode = localStorage.getItem("isDarkMode") === "true";
   if (isDarkMode) {
@@ -432,3 +599,72 @@ function changeButtonsClass() {
     }
   });
 }
+
+// function isBodyHeightExceedingScreen(callback) {
+//   document.addEventListener("DOMContentLoaded", function () {
+//     console.log("heres");
+//     const bodyHeight = document.body.offsetHeight;
+//     const screenHeight = window.innerHeight;
+//     const isExceeding = bodyHeight > screenHeight;
+
+//     // Call the callback function with the result
+//     callback(isExceeding);
+
+//     if (isExceeding) {
+//       // If exceeding, update the height of board and numbers
+//       updateElementHeight(".board", "100%");
+//       updateElementHeight(".numbers", "100%");
+//     }
+//   });
+// }
+
+// function updateElementHeight(selector, newHeight) {
+//   const element = document.querySelector(selector);
+
+//   if (element) {
+//     console.log("heres");
+//     element.style.height = newHeight;
+//   }
+// }
+
+// function updateElementSize(selector, columns, rows) {
+//   const element = document.querySelector(selector);
+//   if (element) {
+//     element.style.gridTemplateColumns = `repeat(${columns}, 10vw)`;
+//     element.style.gridTemplateRows = `repeat(${rows}, 10vw)`;
+//   }
+// }
+
+// function findSuitableSize(callback) {
+//   document.addEventListener("DOMContentLoaded", function () {
+//     const bodyHeight = document.body.offsetHeight;
+//     const screenHeight = window.innerHeight;
+
+//     let columns = 9;
+//     let rows = 9;
+
+//     // Decrease the size until the condition is met
+//     while (bodyHeight > screenHeight && columns > 1 && rows > 1) {
+//       columns--;
+//       rows--;
+//       bodyHeight = document.body.offsetHeight;
+//     }
+
+//     // Update the grid item size
+//     updateElementSize(".board", columns, rows);
+//     updateElementSize(".numbers", 3, rows); // Optionally update the number of rows for numbers
+
+//     // Call the callback function with the final grid sizes
+//     callback(columns, rows);
+//   });
+// }
+
+// findSuitableSize(function (boardColumns, boardRows) {
+//   console.log(
+//     "Suitable board size:",
+//     boardColumns,
+//     "columns x",
+//     boardRows,
+//     "rows"
+//   );
+// });
