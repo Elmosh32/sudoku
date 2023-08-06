@@ -413,10 +413,6 @@ function clickNumber(e) {
 
     if (validCells == BOARD_SIZE) {
       endGame();
-
-      if (soundOn) {
-        winSound.play();
-      }
     }
   }
 }
@@ -531,14 +527,48 @@ function clearDrafts() {
 }
 
 function endGame() {
-  let endMsg = document.createElement("div");
+  if (soundOn) {
+    winSound.play();
+  }
 
-  endMsg.innerHTML = "<h1>Success!</h1>";
+  const endMsgContainer = document.createElement("div");
+  endMsgContainer.classList.add("endmsg-container");
+
+  let endMsg = document.createElement("div");
+  endMsg.innerHTML = "<h1>Congratulations! You Solved the Puzzle!</h1>";
   endMsg.classList.add("endmsg");
-  document.body.append(endMsg);
-  document.getElementsByClassName("board")[0].style["pointer-events"] = "none";
-  document.getElementsByClassName("numbers")[0].style["pointer-events"] =
-    "none";
+  endMsgContainer.appendChild(endMsg);
+
+  document.body.appendChild(endMsgContainer);
+
+  document.querySelector(".board").style.display = "none";
+  document.querySelector(".numbers").style.display = "none";
+
+  setTimeout(function () {
+    window.location.href = "sudoku.html";
+  }, 3500);
+
+  showConfetti();
+}
+
+function showConfetti() {
+  const confettiSettings = {
+    target: "confetti-canvas",
+    max: 80,
+    size: 1,
+    animate: true,
+    props: ["circle", "square", "triangle", "line"],
+    colors: [
+      [165, 104, 246],
+      [230, 61, 135],
+      [0, 199, 228],
+      [253, 214, 126],
+    ],
+    clock: 25,
+  };
+
+  const confetti = new ConfettiGenerator(confettiSettings);
+  confetti.render();
 }
 
 function toggleThemeMode() {
