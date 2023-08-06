@@ -9,15 +9,15 @@ var navbarItems = `<div class="container-fluid">
       class="navbar-toggler"
       type="button"
       data-bs-toggle="collapse"
-      data-bs-target="#navbarTogglerDemo01"
-      aria-controls="navbarTogglerDemo01"
+      data-bs-target="#navbar-collapse"
+      aria-controls="navbar-collapse"
       aria-expanded="false"
       aria-label="Toggle navigation"
     >
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+    <div class="collapse navbar-collapse" id="navbar-collapse">
       <ul class="navbar-nav ms-auto text-start">
         <li class="nav-item spacing">
           <a class="nav-link" href="sudoku.html"> New Game&nbsp </a>
@@ -32,7 +32,7 @@ var navbarItems = `<div class="container-fluid">
           </a>
         </li>
         <li class="nav-item spacing">
-          <a href="#" class="nav-link">
+          <a href="#" class="nav-link" data-toggle="collapse">
             Sound
             <div class="speaker" id="speakerIcon" >
               <span></span>
@@ -40,7 +40,7 @@ var navbarItems = `<div class="container-fluid">
           </a>
         </li>
         <li class="nav-item spacing">
-          <a href="#" class="nav-link">
+          <a href="#" class="nav-link" data-toggle="collapse">
             Dark Mode
             <label class="switch">
               <input type="checkbox" onclick="toggleThemeMode()" />

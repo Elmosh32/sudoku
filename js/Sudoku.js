@@ -65,6 +65,7 @@ class Sudoku {
     for (let i = 1; i <= this.N; i++) {
       numbers.push(i);
     }
+
     this.shuffle(numbers);
 
     for (let i = 0; i < numbers.length; i++) {
@@ -116,9 +117,8 @@ class Sudoku {
         return false;
       }
     }
-    return true;
 
-    // return boardArr.every(boardArr.map((row) => this.isValidArr(row[1])));
+    return true;
   }
 
   checkCols(boardArr) {
@@ -128,6 +128,7 @@ class Sudoku {
         return false;
       }
     }
+
     return true;
   }
 
@@ -145,6 +146,7 @@ class Sudoku {
         }
       }
     }
+
     return true;
   }
 
@@ -157,6 +159,7 @@ class Sudoku {
 
     arr.forEach((element) => a[element]++);
     a[0] = 0;
+
     return a.every((element) => element == 1 || element == EMPTY);
   }
 

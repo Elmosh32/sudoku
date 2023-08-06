@@ -572,7 +572,7 @@ function showConfetti() {
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------
-  --------------------------------------------------EventListener to Sound and ThemeMode---------------------------------------------------
+  --------------------------------------------------EventListener to sound and thememode---------------------------------------------------
   -----------------------------------------------------------------------------------------------------------------------------------------*/
 document.addEventListener("DOMContentLoaded", function () {
   const speakerIcon = document.getElementById("speakerIcon");
@@ -583,7 +583,29 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 /*-----------------------------------------------------------------------------------------------------------------------------------------
-  -------------------------------------------------------------ThemeMode funcs-------------------------------------------------------------
+  -------------------------------------EventListener to close navbar menu in mobile devices---------------------------------------------------
+  -----------------------------------------------------------------------------------------------------------------------------------------*/
+document.addEventListener("DOMContentLoaded", function () {
+  function closeNavbar() {
+    const navbarToggler = document.querySelector(".navbar-toggler");
+    const navbarCollapse = document.querySelector("#navbar-collapse");
+    navbarCollapse.classList.remove("show");
+    navbarToggler.setAttribute("aria-expanded", "false");
+  }
+
+  const speakerIcon = document.getElementById("speakerIcon");
+  speakerIcon.addEventListener("click", function () {
+    setTimeout(closeNavbar, 400);
+  });
+
+  const themeModeIcon = document.querySelector(".switch input");
+  themeModeIcon.addEventListener("click", function () {
+    setTimeout(closeNavbar, 400);
+  });
+});
+
+/*-----------------------------------------------------------------------------------------------------------------------------------------
+  --------------------------------------------------------------darkmode funcs-------------------------------------------------------------
   -----------------------------------------------------------------------------------------------------------------------------------------*/
 function toggleThemeMode() {
   isDarkMode = !isDarkMode;
@@ -657,3 +679,72 @@ function setSoundVolume(volume) {
   areaCompleted.volume = volume;
   winSound.volume = volume;
 }
+
+// function isBodyHeightExceedingScreen(callback) {
+//   document.addEventListener("DOMContentLoaded", function () {
+//     console.log("heres");
+//     const bodyHeight = document.body.offsetHeight;
+//     const screenHeight = window.innerHeight;
+//     const isExceeding = bodyHeight > screenHeight;
+
+//     // Call the callback function with the result
+//     callback(isExceeding);
+
+//     if (isExceeding) {
+//       // If exceeding, update the height of board and numbers
+//       updateElementHeight(".board", "100%");
+//       updateElementHeight(".numbers", "100%");
+//     }
+//   });
+// }
+
+// function updateElementHeight(selector, newHeight) {
+//   const element = document.querySelector(selector);
+
+//   if (element) {
+//     console.log("heres");
+//     element.style.height = newHeight;
+//   }
+// }
+
+// function updateElementSize(selector, columns, rows) {
+//   const element = document.querySelector(selector);
+//   if (element) {
+//     element.style.gridTemplateColumns = `repeat(${columns}, 10vw)`;
+//     element.style.gridTemplateRows = `repeat(${rows}, 10vw)`;
+//   }
+// }
+
+// function findSuitableSize(callback) {
+//   document.addEventListener("DOMContentLoaded", function () {
+//     const bodyHeight = document.body.offsetHeight;
+//     const screenHeight = window.innerHeight;
+
+//     let columns = 9;
+//     let rows = 9;
+
+//     // Decrease the size until the condition is met
+//     while (bodyHeight > screenHeight && columns > 1 && rows > 1) {
+//       columns--;
+//       rows--;
+//       bodyHeight = document.body.offsetHeight;
+//     }
+
+//     // Update the grid item size
+//     updateElementSize(".board", columns, rows);
+//     updateElementSize(".numbers", 3, rows); // Optionally update the number of rows for numbers
+
+//     // Call the callback function with the final grid sizes
+//     callback(columns, rows);
+//   });
+// }
+
+// findSuitableSize(function (boardColumns, boardRows) {
+//   console.log(
+//     "Suitable board size:",
+//     boardColumns,
+//     "columns x",
+//     boardRows,
+//     "rows"
+//   );
+// });
