@@ -14,6 +14,7 @@ const incorrect = new Audio("../sound/572936__bloodpixelhero__error.wav");
 const correct = new Audio("../sound/476178__unadamlar__correct-choice.wav");
 const areaCompleted = new Audio("../sound/531510__eponn__correct-blips.wav");
 const winSound = new Audio("../sound/668436__david819__win.mp3");
+setVolumeForAllSounds(0.5);
 
 incorrect.load();
 correct.load();
@@ -604,6 +605,13 @@ function checkSoundStatus() {
     const speakerIcon = document.getElementById("speakerIcon");
     speakerIcon.classList.add("mute");
   }
+}
+
+function setVolumeForAllSounds(volume) {
+  incorrect.volume = volume;
+  correct.volume = volume;
+  areaCompleted.volume = volume;
+  winSound.volume = volume;
 }
 
 function checkThemeMode() {
