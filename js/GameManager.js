@@ -2,24 +2,19 @@ let gameBoard;
 let numbers;
 let choosenCell;
 let cells;
-let isDarkMode;
 let isDraft;
 let level;
 let neighborsCells = [];
 let sameValCells = [];
 let validCells = BOARD_SIZE;
 
+let isDarkMode;
 let soundOn = true;
 const incorrect = new Audio("../sound/572936__bloodpixelhero__error.wav");
 const correct = new Audio("../sound/476178__unadamlar__correct-choice.wav");
 const areaCompleted = new Audio("../sound/531510__eponn__correct-blips.wav");
 const winSound = new Audio("../sound/668436__david819__win.mp3");
-setVolumeForAllSounds(0.5);
-
-incorrect.load();
-correct.load();
-areaCompleted.load();
-winSound.load();
+setSoundVolume(0.5);
 
 function loadGame() {
   const startScreen = document.querySelector(".start-screen");
@@ -111,19 +106,6 @@ function createNumbers() {
   return numbers;
 }
 
-function createCells() {
-  let res = [];
-
-  for (let i = 0; i < 81; i++) {
-    res.push(new Cell(gameBoard.getVal(i)));
-    if (gameBoard.getVal(i) != EMPTY) {
-      res[i].isFixed = true;
-    }
-  }
-
-  return res;
-}
-
 function createNumbersPanel() {
   let numbersDiv = document.getElementsByClassName("numbers")[0];
   let delDiv = document.createElement("div");
@@ -146,6 +128,19 @@ function createNumbersPanel() {
   editDiv.setAttribute("id", "cmdDraft");
   editDiv.onclick = clickDraft;
   numbersDiv.append(editDiv);
+}
+
+function createCells() {
+  let res = [];
+
+  for (let i = 0; i < 81; i++) {
+    res.push(new Cell(gameBoard.getVal(i)));
+    if (gameBoard.getVal(i) != EMPTY) {
+      res[i].isFixed = true;
+    }
+  }
+
+  return res;
 }
 
 function clickCell(e) {
@@ -240,119 +235,6 @@ function rowsColumnsNeighbors(index) {
       cell.classList.add("clicked-cell-neighbors");
     }
   });
-}
-
-function clearAnimationClasses() {
-  neighborsCells.forEach((cell) => {
-    cell.classList.remove("active-box", "active-column", "active-row");
-  });
-}
-
-function activeRowAnim() {
-  for (let i = 0; i < GRID_SIZE; i++) {
-    if (gameBoard.getVal(getRow(index) * GRID_SIZE + i) == EMPTY) {
-      return false;
-    }
-  }
-
-  let boardDiv = document.getElementsByClassName("board")[0];
-  let rowCells = [];
-  for (let i = 0; i < GRID_SIZE; i++) {
-    rowCells.push(boardDiv.childNodes[getRow(index) * GRID_SIZE + i]);
-  }
-
-  animateCellsFromOutermost(rowCells, "active-row");
-
-  return true;
-}
-
-function activeColAnim() {
-  for (let i = 0; i < GRID_SIZE; i++) {
-    if (gameBoard.getVal(i * GRID_SIZE + getColumn(index)) == EMPTY) {
-      return false;
-    }
-  }
-
-  let boardDiv = document.getElementsByClassName("board")[0];
-  let colCells = [];
-  for (let i = 0; i < GRID_SIZE; i++) {
-    colCells.push(boardDiv.childNodes[i * GRID_SIZE + getColumn(index)]);
-  }
-
-  animateCellsFromOutermost(colCells, "active-column");
-
-  return true;
-}
-
-function activeBoxAnim() {
-  const squareStartIndex = getSquareStartIndex(index);
-  for (let i = 0; i < BOX_SIZE; i++) {
-    for (let j = 0; j < BOX_SIZE; j++) {
-      if (gameBoard.getVal(squareStartIndex + i * GRID_SIZE + j) == EMPTY) {
-        return false;
-      }
-    }
-  }
-
-  let boardDiv = document.getElementsByClassName("board")[0];
-  let boxCells = [];
-  for (let i = 0; i < BOX_SIZE; i++) {
-    for (let j = 0; j < BOX_SIZE; j++) {
-      boxCells.push(boardDiv.childNodes[squareStartIndex + i * GRID_SIZE + j]);
-    }
-  }
-
-  animateCells(boxCells, "active-box");
-
-  return true;
-}
-
-function animateCellsFromOutermost(cells, animationClass) {
-  const animationDuration = 255;
-  const middleIndex = Math.floor(cells.length / 2);
-
-  for (let i = 0; i < middleIndex; i++) {
-    setTimeout(() => {
-      cells[i].classList.add(animationClass);
-    }, animationDuration * i);
-  }
-
-  for (let i = cells.length - 1; i >= middleIndex; i--) {
-    setTimeout(() => {
-      cells[i].classList.add(animationClass);
-    }, animationDuration * (cells.length - i));
-  }
-  cells[middleIndex].classList.add(animationClass);
-}
-
-function animateCells(cells, animationClass) {
-  const animationDuration = 255;
-  const middleIndex = Math.floor(GRID_SIZE / 2);
-
-  cells[middleIndex].classList.add(animationClass);
-  for (let i = 0; i <= middleIndex - 1; i++) {
-    setTimeout(() => {
-      cells[i].classList.add(animationClass);
-    }, animationDuration * (middleIndex - i));
-  }
-
-  for (let i = GRID_SIZE - 1; i >= middleIndex + 1; i--) {
-    setTimeout(() => {
-      cells[i].classList.add(animationClass);
-    }, animationDuration * (i - middleIndex));
-  }
-
-  // for (let i = middleIndex - 1; i >= 0; i--) {
-  //   setTimeout(() => {
-  //     cells[i].classList.add(animationClass);
-  //   }, animationDuration * (middleIndex - i));
-  // }
-
-  // for (let i = middleIndex + 1; i < cells.length; i++) {
-  //   setTimeout(() => {
-  //     cells[i].classList.add(animationClass);
-  //   }, animationDuration * (i - middleIndex));
-  // }
 }
 
 function clickNumber(e) {
@@ -553,6 +435,122 @@ function endGame() {
   showConfetti();
 }
 
+/*-----------------------------------------------------------------------------------------------------------------------------------------
+  --------------------------------------------------------Animation Funcs------------------------------------------------------------------
+  -----------------------------------------------------------------------------------------------------------------------------------------*/
+function clearAnimationClasses() {
+  neighborsCells.forEach((cell) => {
+    cell.classList.remove("active-box", "active-column", "active-row");
+  });
+}
+
+function activeRowAnim() {
+  for (let i = 0; i < GRID_SIZE; i++) {
+    if (gameBoard.getVal(getRow(index) * GRID_SIZE + i) == EMPTY) {
+      return false;
+    }
+  }
+
+  let boardDiv = document.getElementsByClassName("board")[0];
+  let rowCells = [];
+  for (let i = 0; i < GRID_SIZE; i++) {
+    rowCells.push(boardDiv.childNodes[getRow(index) * GRID_SIZE + i]);
+  }
+
+  animateCellsFromOutermost(rowCells, "active-row");
+
+  return true;
+}
+
+function activeColAnim() {
+  for (let i = 0; i < GRID_SIZE; i++) {
+    if (gameBoard.getVal(i * GRID_SIZE + getColumn(index)) == EMPTY) {
+      return false;
+    }
+  }
+
+  let boardDiv = document.getElementsByClassName("board")[0];
+  let colCells = [];
+  for (let i = 0; i < GRID_SIZE; i++) {
+    colCells.push(boardDiv.childNodes[i * GRID_SIZE + getColumn(index)]);
+  }
+
+  animateCellsFromOutermost(colCells, "active-column");
+
+  return true;
+}
+
+function activeBoxAnim() {
+  const squareStartIndex = getSquareStartIndex(index);
+  for (let i = 0; i < BOX_SIZE; i++) {
+    for (let j = 0; j < BOX_SIZE; j++) {
+      if (gameBoard.getVal(squareStartIndex + i * GRID_SIZE + j) == EMPTY) {
+        return false;
+      }
+    }
+  }
+
+  let boardDiv = document.getElementsByClassName("board")[0];
+  let boxCells = [];
+  for (let i = 0; i < BOX_SIZE; i++) {
+    for (let j = 0; j < BOX_SIZE; j++) {
+      boxCells.push(boardDiv.childNodes[squareStartIndex + i * GRID_SIZE + j]);
+    }
+  }
+
+  animateCells(boxCells, "active-box");
+
+  return true;
+}
+
+function animateCellsFromOutermost(cells, animationClass) {
+  const animationDuration = 255;
+  const middleIndex = Math.floor(cells.length / 2);
+
+  for (let i = 0; i < middleIndex; i++) {
+    setTimeout(() => {
+      cells[i].classList.add(animationClass);
+    }, animationDuration * i);
+  }
+
+  for (let i = cells.length - 1; i >= middleIndex; i--) {
+    setTimeout(() => {
+      cells[i].classList.add(animationClass);
+    }, animationDuration * (cells.length - i));
+  }
+  cells[middleIndex].classList.add(animationClass);
+}
+
+function animateCells(cells, animationClass) {
+  const animationDuration = 255;
+  const middleIndex = Math.floor(GRID_SIZE / 2);
+
+  cells[middleIndex].classList.add(animationClass);
+  for (let i = 0; i <= middleIndex - 1; i++) {
+    setTimeout(() => {
+      cells[i].classList.add(animationClass);
+    }, animationDuration * (middleIndex - i));
+  }
+
+  for (let i = GRID_SIZE - 1; i >= middleIndex + 1; i--) {
+    setTimeout(() => {
+      cells[i].classList.add(animationClass);
+    }, animationDuration * (i - middleIndex));
+  }
+
+  // for (let i = middleIndex - 1; i >= 0; i--) {
+  //   setTimeout(() => {
+  //     cells[i].classList.add(animationClass);
+  //   }, animationDuration * (middleIndex - i));
+  // }
+
+  // for (let i = middleIndex + 1; i < cells.length; i++) {
+  //   setTimeout(() => {
+  //     cells[i].classList.add(animationClass);
+  //   }, animationDuration * (i - middleIndex));
+  // }
+}
+
 function showConfetti() {
   const confettiSettings = {
     target: "confetti-canvas",
@@ -573,6 +571,20 @@ function showConfetti() {
   confetti.render();
 }
 
+/*-----------------------------------------------------------------------------------------------------------------------------------------
+  --------------------------------------------------EventListener to Sound and ThemeMode---------------------------------------------------
+  -----------------------------------------------------------------------------------------------------------------------------------------*/
+document.addEventListener("DOMContentLoaded", function () {
+  const speakerIcon = document.getElementById("speakerIcon");
+  speakerIcon.addEventListener("click", toggleSound);
+
+  checkThemeMode();
+  checkSoundStatus();
+});
+
+/*-----------------------------------------------------------------------------------------------------------------------------------------
+  -------------------------------------------------------------ThemeMode funcs-------------------------------------------------------------
+  -----------------------------------------------------------------------------------------------------------------------------------------*/
 function toggleThemeMode() {
   isDarkMode = !isDarkMode;
   localStorage.setItem("isDarkMode", isDarkMode.toString());
@@ -583,35 +595,6 @@ function toggleThemeMode() {
   if (window.location.href.includes("sudoku.html")) {
     changeButtonsClass();
   }
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-  const speakerIcon = document.getElementById("speakerIcon");
-  speakerIcon.addEventListener("click", toggleSound);
-});
-
-function toggleSound(e) {
-  e.preventDefault();
-  const speakerIcon = document.getElementById("speakerIcon");
-  speakerIcon.classList.toggle("mute");
-
-  soundOn = !soundOn;
-  localStorage.setItem("soundOn", soundOn.toString());
-}
-
-function checkSoundStatus() {
-  soundOn = localStorage.getItem("soundOn") === "true";
-  if (!soundOn) {
-    const speakerIcon = document.getElementById("speakerIcon");
-    speakerIcon.classList.add("mute");
-  }
-}
-
-function setVolumeForAllSounds(volume) {
-  incorrect.volume = volume;
-  correct.volume = volume;
-  areaCompleted.volume = volume;
-  winSound.volume = volume;
 }
 
 function checkThemeMode() {
@@ -646,4 +629,31 @@ function changeButtonsClass() {
       btnElement.classList.add(`btn-${button.color}`);
     }
   });
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------------------------
+  -----------------------------------------------------------------sound funcs-------------------------------------------------------------
+  -----------------------------------------------------------------------------------------------------------------------------------------*/
+function toggleSound(e) {
+  e.preventDefault();
+  const speakerIcon = document.getElementById("speakerIcon");
+  speakerIcon.classList.toggle("mute");
+
+  soundOn = !soundOn;
+  localStorage.setItem("soundOn", soundOn.toString());
+}
+
+function checkSoundStatus() {
+  soundOn = localStorage.getItem("soundOn") === "true";
+  if (!soundOn) {
+    const speakerIcon = document.getElementById("speakerIcon");
+    speakerIcon.classList.add("mute");
+  }
+}
+
+function setSoundVolume(volume) {
+  incorrect.volume = volume;
+  correct.volume = volume;
+  areaCompleted.volume = volume;
+  winSound.volume = volume;
 }
