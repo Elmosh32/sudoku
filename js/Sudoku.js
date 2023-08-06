@@ -3,7 +3,7 @@ const EASY = 0,
   MEDIUM = 1,
   HARD = 2,
   EVIL = 3;
-const EMPTY_CELLS = [2, 50, 55, 60];
+const EMPTY_CELLS = [42, 48, 52, 56];
 const BOARD_SIZE = 81;
 const GRID_SIZE = 9;
 const BOX_SIZE = 3;
@@ -18,15 +18,20 @@ class Sudoku {
   }
 
   generateGameBoard() {
-    for (let i = 1; i <= EMPTY_CELLS[this.level]; i++) {
-      let row = Math.floor(Math.random() * this.N);
-      let col = Math.floor(Math.random() * this.N);
-      while (this.gameBoard[row][col] == EMPTY) {
-        row = Math.floor(Math.random() * this.N);
-        col = Math.floor(Math.random() * this.N);
-      }
+    const selectedCells = new Set();
+    const totalEmptyCells = EMPTY_CELLS[this.level];
+    let cellsSelected = 0;
 
-      this.gameBoard[row][col][1] = EMPTY;
+    while (cellsSelected < totalEmptyCells) {
+      const row = Math.floor(Math.random() * this.N);
+      const col = Math.floor(Math.random() * this.N);
+      const cellKey = `${row}-${col}`;
+
+      if (!selectedCells.has(cellKey)) {
+        selectedCells.add(cellKey);
+        this.gameBoard[row][col][1] = EMPTY;
+        cellsSelected++;
+      }
     }
   }
 

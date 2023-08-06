@@ -378,6 +378,7 @@ function clickNumber(e) {
     if (gameBoard.isLegalcell(index) == false) {
       if (prevVal == gameBoard.getCorrectVal(index)) {
         decreaseAmountVal(prevVal);
+        validCells--;
       }
       choosenCell.classList.add("illegal-cell");
       if (soundOn) {
@@ -594,6 +595,15 @@ function toggleSound(e) {
   speakerIcon.classList.toggle("mute");
 
   soundOn = !soundOn;
+  localStorage.setItem("soundOn", soundOn.toString());
+}
+
+function checkSoundStatus() {
+  soundOn = localStorage.getItem("soundOn") === "true";
+  if (!soundOn) {
+    const speakerIcon = document.getElementById("speakerIcon");
+    speakerIcon.classList.add("mute");
+  }
 }
 
 function checkThemeMode() {
