@@ -18,6 +18,7 @@ const incorrect = new Audio("../sound/572936__bloodpixelhero__error.wav");
 const correct = new Audio("../sound/476178__unadamlar__correct-choice.wav");
 const areaCompleted = new Audio("../sound/531510__eponn__correct-blips.wav");
 const winSound = new Audio("../sound/668436__david819__win.mp3");
+const deleteSound = new Audio("../sound/del.wav");
 setSoundVolume(0.5);
 
 function loadGame() {
@@ -122,7 +123,6 @@ function resumeStopwatch() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Add event listeners to the buttons
   document.getElementById("pauseBtn").addEventListener("click", pauseStopwatch);
   document
     .getElementById("resumeBtn")
@@ -400,6 +400,9 @@ function deleteCell(e) {
     }
 
     decreaseAmountVal(num);
+  }
+  if (soundOn) {
+    deleteSound.play();
   }
 }
 
@@ -745,72 +748,3 @@ function setSoundVolume(volume) {
   areaCompleted.volume = volume;
   winSound.volume = volume;
 }
-
-// function isBodyHeightExceedingScreen(callback) {
-//   document.addEventListener("DOMContentLoaded", function () {
-//     console.log("heres");
-//     const bodyHeight = document.body.offsetHeight;
-//     const screenHeight = window.innerHeight;
-//     const isExceeding = bodyHeight > screenHeight;
-
-//     // Call the callback function with the result
-//     callback(isExceeding);
-
-//     if (isExceeding) {
-//       // If exceeding, update the height of board and numbers
-//       updateElementHeight(".board", "100%");
-//       updateElementHeight(".numbers", "100%");
-//     }
-//   });
-// }
-
-// function updateElementHeight(selector, newHeight) {
-//   const element = document.querySelector(selector);
-
-//   if (element) {
-//     console.log("heres");
-//     element.style.height = newHeight;
-//   }
-// }
-
-// function updateElementSize(selector, columns, rows) {
-//   const element = document.querySelector(selector);
-//   if (element) {
-//     element.style.gridTemplateColumns = `repeat(${columns}, 10vw)`;
-//     element.style.gridTemplateRows = `repeat(${rows}, 10vw)`;
-//   }
-// }
-
-// function findSuitableSize(callback) {
-//   document.addEventListener("DOMContentLoaded", function () {
-//     const bodyHeight = document.body.offsetHeight;
-//     const screenHeight = window.innerHeight;
-
-//     let columns = 9;
-//     let rows = 9;
-
-//     // Decrease the size until the condition is met
-//     while (bodyHeight > screenHeight && columns > 1 && rows > 1) {
-//       columns--;
-//       rows--;
-//       bodyHeight = document.body.offsetHeight;
-//     }
-
-//     // Update the grid item size
-//     updateElementSize(".board", columns, rows);
-//     updateElementSize(".numbers", 3, rows); // Optionally update the number of rows for numbers
-
-//     // Call the callback function with the final grid sizes
-//     callback(columns, rows);
-//   });
-// }
-
-// findSuitableSize(function (boardColumns, boardRows) {
-//   console.log(
-//     "Suitable board size:",
-//     boardColumns,
-//     "columns x",
-//     boardRows,
-//     "rows"
-//   );
-// });
