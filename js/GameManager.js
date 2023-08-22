@@ -470,7 +470,6 @@ function clickDraft(event) {
     }
 
     if (!isEmptyCell()) {
-      console.log("gere");
       draftDiv.classList.add("draft-disabled");
     }
   }
