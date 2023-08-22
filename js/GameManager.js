@@ -188,7 +188,11 @@ function createNumbersPanel() {
   });
 
   delDiv.innerHTML = "delete";
-  delDiv.setAttribute("class", "number-panel cmd");
+  if (isMobileOrTablet()) {
+    delDiv.setAttribute("class", "number-panel-mobile cmd");
+  } else {
+    delDiv.setAttribute("class", "number-panel cmd");
+  }
   delDiv.onclick = deleteCell;
   delDiv.setAttribute("id", "cmdX");
   numbersDiv.append(delDiv);
@@ -196,7 +200,10 @@ function createNumbersPanel() {
   editDiv.innerHTML = "draft";
   editDiv.setAttribute("class", "number-panel cmd");
   editDiv.setAttribute("id", "cmdDraft");
-  editDiv.onclick = clickDraft;
+  editDiv.addEventListener("touchstart", touchStartDraft);
+  editDiv.addEventListener("touchmove", touchMove);
+  editDiv.addEventListener("touchend", touchEndDraft);
+  editDiv.addEventListener("click", clickDraft);
   numbersDiv.append(editDiv);
 }
 
@@ -218,21 +225,23 @@ function clickCell(e) {
   let index;
 
   if (isPaused) {
-    return; // Do nothing if the timer is paused
+    return;
   }
-  choosenCell = e.target;
 
+  choosenCell = e.target;
   index = getCellIndex();
   rowsColumnsNeighbors(index);
 
-  if (isEmptyCell()) {
-    draftDiv.classList.remove("draft-disabled");
+  if (isDraft) {
+    if (isEmptyCell()) {
+      draftDiv.classList.remove("draft-disabled");
+    } else {
+      draftDiv.classList.add("draft-disabled");
+    }
   } else {
-    draftDiv.classList.add("draft-disabled");
-  }
-
-  if (choosenCell.textContent.trim()) {
-    sameVal(choosenCell.textContent, index);
+    if (choosenCell.textContent.trim()) {
+      sameVal(choosenCell.textContent, index);
+    }
   }
 }
 
@@ -378,11 +387,13 @@ function getCellIndex() {
 
 function deleteCell(e) {
   let num, index, validNum;
+  let draftDiv = document.getElementById("cmdDraft");
 
   if (choosenCell == null) {
     return;
   }
 
+  draftDiv.classList.remove("draft-disabled");
   choosenCell.classList.remove("illegal-cell");
 
   if (isDraftCell()) {
@@ -420,20 +431,58 @@ function increaseAmountVal(e, index) {
   e.target.lastChild.innerHTML = numbers[index - 1].amount;
 }
 
-function clickDraft() {
+function touchStartDraft(event) {
+  event.preventDefault();
+  touchMoved = false;
   let draftDiv = document.getElementById("cmdDraft");
+  draftDiv.classList.toggle("draft-clicked");
+}
 
+function touchMove(event) {
+  touchMoved = true;
+}
+
+function touchEndDraft(event) {
+  if (!touchMoved) {
+    event.preventDefault();
+    clickDraft();
+  }
+}
+
+function clickDraft(event) {
+  let draftDiv = document.getElementById("cmdDraft");
   if (isDraft) {
-    draftDiv.classList.remove("draft-clicked");
+    if (isMobileOrTablet()) {
+      draftDiv.classList.remove("draft-clicked-mobile");
+    } else {
+      draftDiv.classList.remove("draft-clicked");
+    }
     draftDiv.classList.add("cmd");
     if (isEmptyCell()) {
       draftDiv.classList.remove("draft-disabled");
     }
   } else {
     draftDiv.classList.remove("cmd");
-    draftDiv.classList.add("draft-clicked");
+    if (isMobileOrTablet()) {
+      draftDiv.classList.add("draft-clicked-mobile");
+    } else {
+      draftDiv.classList.add("draft-clicked");
+    }
+
+    if (!isEmptyCell()) {
+      console.log("gere");
+      draftDiv.classList.add("draft-disabled");
+    }
   }
+
   isDraft = !isDraft;
+}
+
+function isMobileOrTablet() {
+  const userAgent = navigator.userAgent.toLowerCase();
+  return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
+    userAgent
+  );
 }
 
 function toggleDraftCell() {
