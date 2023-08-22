@@ -165,7 +165,9 @@ function createNumbers() {
   }
 
   for (let i = 0; i < 81; i++) {
-    if (gameBoard.getVal(i) != EMPTY) numbersCounts[gameBoard.getVal(i) - 1]++;
+    if (gameBoard.getVal(i) != EMPTY) {
+      numbersCounts[gameBoard.getVal(i) - 1]++;
+    }
   }
 
   for (let i = 1; i <= GRID_SIZE; i++) {
@@ -376,8 +378,11 @@ function clickNumber(e) {
 }
 
 function getCellIndex() {
-  let boardDiv = document.getElementsByClassName("board")[0];
+  // if (!choosenCell) {
+  //   return -1;
+  // }
 
+  let boardDiv = document.getElementsByClassName("board")[0];
   for (let i = 0; i < boardDiv.childNodes.length; i++) {
     if (boardDiv.childNodes[i] == choosenCell) {
       return i;
@@ -396,6 +401,10 @@ function deleteCell(e) {
   draftDiv.classList.remove("draft-disabled");
   choosenCell.classList.remove("illegal-cell");
 
+  if (soundOn) {
+    deleteSound.play();
+  }
+
   if (isDraftCell()) {
     clearDrafts();
   } else {
@@ -411,9 +420,6 @@ function deleteCell(e) {
     }
 
     decreaseAmountVal(num);
-  }
-  if (soundOn) {
-    deleteSound.play();
   }
 }
 
@@ -453,6 +459,7 @@ function touchEndDraft(event) {
 
 function clickDraft(event) {
   let draftDiv = document.getElementById("cmdDraft");
+
   if (isDraft) {
     if (isMobileOrTablet()) {
       draftDiv.classList.remove("draft-clicked-mobile");
@@ -460,8 +467,14 @@ function clickDraft(event) {
       draftDiv.classList.remove("draft-clicked");
     }
     draftDiv.classList.add("cmd");
-    if (isEmptyCell()) {
-      draftDiv.classList.remove("draft-disabled");
+    if (choosenCell) {
+      if (isEmptyCell()) {
+        draftDiv.classList.remove("draft-disabled");
+      }
+
+      if (choosenCell.textContent.trim()) {
+        sameVal(choosenCell.textContent, index);
+      }
     }
   } else {
     draftDiv.classList.remove("cmd");
@@ -471,8 +484,9 @@ function clickDraft(event) {
       draftDiv.classList.add("draft-clicked");
     }
 
-    if (!isEmptyCell()) {
+    if (choosenCell && !isEmptyCell()) {
       draftDiv.classList.add("draft-disabled");
+      removeSameVal();
     }
   }
 
@@ -600,6 +614,7 @@ function activeColAnim() {
 }
 
 function activeBoxAnim() {
+  index = getCellIndex();
   const squareStartIndex = getSquareStartIndex(index);
   for (let i = 0; i < BOX_SIZE; i++) {
     for (let j = 0; j < BOX_SIZE; j++) {
