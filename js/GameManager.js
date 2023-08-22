@@ -432,7 +432,9 @@ function increaseAmountVal(e, index) {
 }
 
 function touchStartDraft(event) {
-  event.preventDefault();
+  if (event.cancelable) {
+    event.preventDefault();
+  }
   touchMoved = false;
   let draftDiv = document.getElementById("cmdDraft");
   draftDiv.classList.toggle("draft-clicked");
