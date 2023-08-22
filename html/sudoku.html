@@ -122,9 +122,18 @@
       </div>
 
       <div class="game-container">
-        <div class="board"></div>
+        <div id="stopwatchContainer" style="display: none">
+          <button id="pauseBtn" class="btn btn-primary">Pause</button>
+          <div id="stopwatch">00:00</div>
+          <button id="resumeBtn" class="btn btn-success" disabled>
+            Resume
+          </button>
+        </div>
+
         <div class="numbers"></div>
+        <div class="board"></div>
       </div>
+
       <canvas id="confetti-canvas"></canvas>
     </main>
   </body>

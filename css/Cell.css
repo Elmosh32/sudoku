@@ -42,11 +42,11 @@
 }
 
 .cell-table {
-  /* display: none; */
+  display: none;
   color: #4fc3f7;
   pointer-events: none;
-  padding: 0 0 0 5px; /* Add some padding to create spacing between numbers and cell edges */
-  box-sizing: border-box; /* Include padding in the element's total width and height */
+  padding: 0 0 0 5px;
+  box-sizing: border-box;
 }
 
 @media (orientation: landscape) {

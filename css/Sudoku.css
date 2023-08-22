@@ -131,12 +131,35 @@ h2 {
 
 .numbers {
   display: grid;
-  order: 1;
+  order: 2;
+  height: fit-content;
+  width: fit-content;
+  margin-inline-start: -251px;
 }
 
 .board {
   display: grid;
-  order: 0;
+  order: 1;
+}
+
+#stopwatchContainer {
+  background-color: var(--stopwatch-background-color);
+  padding: 4px;
+  order: 2;
+  border-radius: 12px;
+  border: 1px solid #00ff99;
+  z-index: 9999;
+  margin-top: 0vh;
+  align-self: flex-start;
+}
+
+#stopwatch {
+  display: inline;
+  font-size: 30px;
+  color: var(--p-text-color);
+  font-weight: bold;
+  text-align: center;
+  align-items: center;
 }
 
 @media (orientation: landscape) {
@@ -190,19 +213,43 @@ h2 {
 }
 
 @media (orientation: portrait) {
-  .game-container {
+  /* .game-container {
     margin-top: 5vh;
-  }
+  } */
 
   @media (max-width: 575.98px) {
+    .game-container {
+      gap: 2px;
+      margin-top: 2px;
+    }
     .board {
       grid-template-columns: repeat(9, 10vw);
       grid-template-rows: repeat(9, 10vw);
+      order: 1;
     }
 
     .numbers {
       grid-template-columns: repeat(3, 15vw);
       grid-auto-rows: 14vw;
+      order: 2;
+      margin: auto;
+    }
+
+    #stopwatch {
+      font-size: 15px;
+    }
+
+    #stopwatchContainer {
+      order: 0;
+      margin-top: 0%;
+    }
+
+    #pauseBtn {
+      font-size: 8px;
+    }
+
+    #resumeBtn {
+      font-size: 8px;
     }
   }
 
@@ -215,6 +262,25 @@ h2 {
     .numbers {
       grid-template-columns: repeat(3, 15vw);
       grid-auto-rows: 14vw;
+      order: 2;
+      margin: auto;
+    }
+
+    #stopwatch {
+      font-size: 20px;
+    }
+
+    #stopwatchContainer {
+      order: 0;
+      margin-top: 0%;
+    }
+
+    #pauseBtn {
+      font-size: 12px;
+    }
+
+    #resumeBtn {
+      font-size: 12px;
     }
   }
 
@@ -241,9 +307,6 @@ h2 {
   display: block;
   position: relative;
   align-items: center;
-  /* padding-left: 35px;
-  margin-bottom: 12px; */
-  /* cursor: ; */
   font-size: 22px;
 }
 
@@ -253,6 +316,7 @@ h2 {
   --primary: #b81577;
   --body-background-color: powderblue;
   --header-background-color: #f5f5f5;
+  --stopwatch-background-color: #00f2ff82;
   --header-color: #1a5276;
   --p-text-color: #4a4a4a;
   --li-text-color: #884ea0;
@@ -264,6 +328,7 @@ h2 {
   --primary: #78cdb6;
   --body-background-color: #121212;
   --header-background-color: #1f1f1f;
+  --stopwatch-background-color: #343232;
   --header-color: #2fde7c;
   --p-text-color: #eaeaea;
   --li-text-color: #f5f5f5;
@@ -338,7 +403,6 @@ body {
   display: inline-block;
   color: #fff;
   cursor: pointer;
-  /* padding: 0 44px 0 0; */
   animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
   height: 30px;
   width: 30px;
@@ -456,9 +520,8 @@ input:checked + .slider:before {
 }
 
 .nav-item.spacing {
-  /* Adjust the line height and padding as needed */
-  line-height: 50px; /* Set the desired line height */
-  padding: 0 10px; /* Add padding to create space around the content */
+  line-height: 50px;
+  padding: 0 10px;
 }
 
 @keyframes confetti-fall {
@@ -480,4 +543,9 @@ input:checked + .slider:before {
   clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
   opacity: 0;
   animation: confetti-fall 4s ease-in-out;
+}
+
+.paused-board {
+  content-visibility: hidden;
+  background-color: whitesmoke !important;
 }

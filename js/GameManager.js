@@ -8,6 +8,10 @@ let neighborsCells = [];
 let sameValCells = [];
 let validCells = BOARD_SIZE;
 
+let elapsedTime = 0;
+let stopwatchInterval;
+let isPaused = false;
+
 let isDarkMode;
 let soundOn = true;
 const incorrect = new Audio("../sound/572936__bloodpixelhero__error.wav");
@@ -28,6 +32,8 @@ function loadGame() {
   isDraft = false;
   isDarkMode = false;
   validCells -= EMPTY_CELLS[level];
+  document.getElementById("stopwatchContainer").style.display = "inline";
+  startStopwatch();
 }
 
 function clickStart() {
@@ -58,6 +64,70 @@ function createGUI() {
   createBoard();
   createNumbersPanel();
 }
+
+function startStopwatch() {
+  clearInterval(stopwatchInterval);
+  updateStopwatchDisplay();
+  stopwatchInterval = setInterval(() => {
+    if (!isPaused) {
+      elapsedTime++;
+      updateStopwatchDisplay();
+    }
+  }, 1000);
+}
+
+function updateStopwatchDisplay() {
+  const stopwatchDiv = document.getElementById("stopwatch");
+  const minutes = Math.floor(elapsedTime / 60);
+  const seconds = elapsedTime % 60;
+  const formattedTime = `${String(minutes).padStart(2, "0")}:${String(
+    seconds
+  ).padStart(2, "0")}`;
+  stopwatchDiv.textContent = formattedTime;
+}
+
+function pauseStopwatch() {
+  isPaused = true;
+  clearInterval(stopwatchInterval);
+  document.getElementById("pauseBtn").disabled = true;
+  document.getElementById("resumeBtn").disabled = false;
+
+  const cellElements = document.querySelectorAll(".cell");
+
+  cellElements.forEach((cell) => {
+    cell.classList.add("paused-board");
+  });
+  clearMarks();
+}
+
+function resumeStopwatch() {
+  isPaused = false;
+  startStopwatch();
+  document.getElementById("pauseBtn").disabled = false;
+  document.getElementById("resumeBtn").disabled = true;
+
+  const cellElements = document.querySelectorAll(".cell");
+
+  cellElements.forEach((cell) => {
+    cell.classList.remove("paused-board");
+  });
+
+  index = getCellIndex();
+  if (index) {
+    rowsColumnsNeighbors(index);
+    if (!isEmptyCell()) {
+      sameVal(choosenCell.textContent, index);
+    }
+  }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  // Add event listeners to the buttons
+  document.getElementById("pauseBtn").addEventListener("click", pauseStopwatch);
+  document
+    .getElementById("resumeBtn")
+    .addEventListener("click", resumeStopwatch);
+});
 
 function createBoard() {
   var right = 8;
@@ -147,6 +217,9 @@ function clickCell(e) {
   let draftDiv = document.getElementById("cmdDraft");
   let index;
 
+  if (isPaused) {
+    return; // Do nothing if the timer is paused
+  }
   choosenCell = e.target;
 
   index = getCellIndex();
@@ -239,8 +312,8 @@ function rowsColumnsNeighbors(index) {
 
 function clickNumber(e) {
   let currVal, prevVal, index;
-  let validArea = false;
-  if (choosenCell == null) {
+
+  if (isPaused || choosenCell == null) {
     return;
   }
 
@@ -271,22 +344,14 @@ function clickNumber(e) {
       if (prevVal != numbers[currVal - 1].val) {
         increaseAmountVal(e, currVal);
         validCells++;
-        if (activeBoxAnim()) {
-          validArea = true;
-        }
-        if (activeColAnim()) {
-          validArea = true;
-        }
-        if (activeRowAnim()) {
-          validArea = true;
-        }
 
-        if (validArea) {
+        if (activeBoxAnim() || activeColAnim() || activeRowAnim()) {
           setTimeout(clearAnimationClasses, 1300);
           if (soundOn) {
             areaCompleted.play();
           }
         }
+
         sameVal(numbers[currVal - 1].val, index);
 
         if (soundOn) {
@@ -414,6 +479,7 @@ function endGame() {
   if (soundOn) {
     winSound.play();
   }
+  clearInterval(stopwatchInterval);
 
   const endMsgContainer = document.createElement("div");
   endMsgContainer.classList.add("endmsg-container");
@@ -680,4 +746,71 @@ function setSoundVolume(volume) {
   winSound.volume = volume;
 }
 
+// function isBodyHeightExceedingScreen(callback) {
+//   document.addEventListener("DOMContentLoaded", function () {
+//     console.log("heres");
+//     const bodyHeight = document.body.offsetHeight;
+//     const screenHeight = window.innerHeight;
+//     const isExceeding = bodyHeight > screenHeight;
 
+//     // Call the callback function with the result
+//     callback(isExceeding);
+
+//     if (isExceeding) {
+//       // If exceeding, update the height of board and numbers
+//       updateElementHeight(".board", "100%");
+//       updateElementHeight(".numbers", "100%");
+//     }
+//   });
+// }
+
+// function updateElementHeight(selector, newHeight) {
+//   const element = document.querySelector(selector);
+
+//   if (element) {
+//     console.log("heres");
+//     element.style.height = newHeight;
+//   }
+// }
+
+// function updateElementSize(selector, columns, rows) {
+//   const element = document.querySelector(selector);
+//   if (element) {
+//     element.style.gridTemplateColumns = `repeat(${columns}, 10vw)`;
+//     element.style.gridTemplateRows = `repeat(${rows}, 10vw)`;
+//   }
+// }
+
+// function findSuitableSize(callback) {
+//   document.addEventListener("DOMContentLoaded", function () {
+//     const bodyHeight = document.body.offsetHeight;
+//     const screenHeight = window.innerHeight;
+
+//     let columns = 9;
+//     let rows = 9;
+
+//     // Decrease the size until the condition is met
+//     while (bodyHeight > screenHeight && columns > 1 && rows > 1) {
+//       columns--;
+//       rows--;
+//       bodyHeight = document.body.offsetHeight;
+//     }
+
+//     // Update the grid item size
+//     updateElementSize(".board", columns, rows);
+//     updateElementSize(".numbers", 3, rows); // Optionally update the number of rows for numbers
+
+//     // Call the callback function with the final grid sizes
+//     callback(columns, rows);
+//   });
+// }
+
+// findSuitableSize(function (boardColumns, boardRows) {
+//   console.log(
+//     "Suitable board size:",
+//     boardColumns,
+//     "columns x",
+//     boardRows,
+//     "rows"
+//   );
+// });
