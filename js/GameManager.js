@@ -66,69 +66,6 @@ function createGUI() {
   createNumbersPanel();
 }
 
-function startStopwatch() {
-  clearInterval(stopwatchInterval);
-  updateStopwatchDisplay();
-  stopwatchInterval = setInterval(() => {
-    if (!isPaused) {
-      elapsedTime++;
-      updateStopwatchDisplay();
-    }
-  }, 1000);
-}
-
-function updateStopwatchDisplay() {
-  const stopwatchDiv = document.getElementById("stopwatch");
-  const minutes = Math.floor(elapsedTime / 60);
-  const seconds = elapsedTime % 60;
-  const formattedTime = `${String(minutes).padStart(2, "0")}:${String(
-    seconds
-  ).padStart(2, "0")}`;
-  stopwatchDiv.textContent = formattedTime;
-}
-
-function pauseStopwatch() {
-  isPaused = true;
-  clearInterval(stopwatchInterval);
-  document.getElementById("pauseBtn").disabled = true;
-  document.getElementById("resumeBtn").disabled = false;
-
-  const cellElements = document.querySelectorAll(".cell");
-
-  cellElements.forEach((cell) => {
-    cell.classList.add("paused-board");
-  });
-  clearMarks();
-}
-
-function resumeStopwatch() {
-  isPaused = false;
-  startStopwatch();
-  document.getElementById("pauseBtn").disabled = false;
-  document.getElementById("resumeBtn").disabled = true;
-
-  const cellElements = document.querySelectorAll(".cell");
-
-  cellElements.forEach((cell) => {
-    cell.classList.remove("paused-board");
-  });
-
-  index = getCellIndex();
-  if (index) {
-    rowsColumnsNeighbors(index);
-    if (!isEmptyCell()) {
-      sameVal(choosenCell.textContent, index);
-    }
-  }
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-  document.getElementById("pauseBtn").addEventListener("click", pauseStopwatch);
-  document
-    .getElementById("resumeBtn")
-    .addEventListener("click", resumeStopwatch);
-});
-
 function createBoard() {
   var right = 8;
   const boardDiv = document.querySelector(".board");
@@ -200,12 +137,13 @@ function createNumbersPanel() {
   numbersDiv.append(delDiv);
 
   editDiv.innerHTML = "draft";
-  editDiv.setAttribute("class", "number-panel cmd");
+  if (isMobileOrTablet()) {
+    editDiv.setAttribute("class", "number-panel-mobile cmd");
+  } else {
+    editDiv.setAttribute("class", "number-panel cmd");
+  }
   editDiv.setAttribute("id", "cmdDraft");
-  editDiv.addEventListener("touchstart", touchStartDraft);
-  editDiv.addEventListener("touchmove", touchMove);
-  editDiv.addEventListener("touchend", touchEndDraft);
-  editDiv.addEventListener("click", clickDraft);
+  editDiv.onclick = clickDraft;
   numbersDiv.append(editDiv);
 }
 
@@ -437,26 +375,6 @@ function increaseAmountVal(e, index) {
   e.target.lastChild.innerHTML = numbers[index - 1].amount;
 }
 
-function touchStartDraft(event) {
-  if (event.cancelable) {
-    event.preventDefault();
-  }
-  touchMoved = false;
-  let draftDiv = document.getElementById("cmdDraft");
-  draftDiv.classList.toggle("draft-clicked");
-}
-
-function touchMove(event) {
-  touchMoved = true;
-}
-
-function touchEndDraft(event) {
-  if (!touchMoved) {
-    event.preventDefault();
-    clickDraft();
-  }
-}
-
 function clickDraft(event) {
   let draftDiv = document.getElementById("cmdDraft");
 
@@ -560,6 +478,7 @@ function endGame() {
 
   document.querySelector(".board").style.display = "none";
   document.querySelector(".numbers").style.display = "none";
+  document.querySelector("#stopwatchContainer").style.display = "none";
 
   setTimeout(function () {
     window.location.href = "sudoku.html";
@@ -787,6 +706,71 @@ function changeButtonsClass() {
   });
 }
 
+/*-----------------------------------------------------------------------------------------------------------------------------------------
+  -----------------------------------------------------------------watch funcs-------------------------------------------------------------
+  -----------------------------------------------------------------------------------------------------------------------------------------*/
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("pauseBtn").addEventListener("click", pauseStopwatch);
+  document
+    .getElementById("resumeBtn")
+    .addEventListener("click", resumeStopwatch);
+});
+
+function startStopwatch() {
+  clearInterval(stopwatchInterval);
+  updateStopwatchDisplay();
+  stopwatchInterval = setInterval(() => {
+    if (!isPaused) {
+      elapsedTime++;
+      updateStopwatchDisplay();
+    }
+  }, 1000);
+}
+
+function updateStopwatchDisplay() {
+  const stopwatchDiv = document.getElementById("stopwatch");
+  const minutes = Math.floor(elapsedTime / 60);
+  const seconds = elapsedTime % 60;
+  const formattedTime = `${String(minutes).padStart(2, "0")}:${String(
+    seconds
+  ).padStart(2, "0")}`;
+  stopwatchDiv.textContent = formattedTime;
+}
+
+function pauseStopwatch() {
+  isPaused = true;
+  clearInterval(stopwatchInterval);
+  document.getElementById("pauseBtn").disabled = true;
+  document.getElementById("resumeBtn").disabled = false;
+
+  const cellElements = document.querySelectorAll(".cell");
+
+  cellElements.forEach((cell) => {
+    cell.classList.add("paused-board");
+  });
+  clearMarks();
+}
+
+function resumeStopwatch() {
+  isPaused = false;
+  startStopwatch();
+  document.getElementById("pauseBtn").disabled = false;
+  document.getElementById("resumeBtn").disabled = true;
+
+  const cellElements = document.querySelectorAll(".cell");
+
+  cellElements.forEach((cell) => {
+    cell.classList.remove("paused-board");
+  });
+
+  index = getCellIndex();
+  if (index) {
+    rowsColumnsNeighbors(index);
+    if (!isEmptyCell()) {
+      sameVal(choosenCell.textContent, index);
+    }
+  }
+}
 /*-----------------------------------------------------------------------------------------------------------------------------------------
   -----------------------------------------------------------------sound funcs-------------------------------------------------------------
   -----------------------------------------------------------------------------------------------------------------------------------------*/
