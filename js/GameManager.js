@@ -402,9 +402,13 @@ function clickDraft(event) {
       draftDiv.classList.add("draft-clicked");
     }
 
-    if (choosenCell && !isEmptyCell()) {
-      draftDiv.classList.add("draft-disabled");
-      removeSameVal();
+    if (choosenCell) {
+      if (!isEmptyCell()) {
+        draftDiv.classList.add("draft-disabled");
+        removeSameVal();
+      } else {
+        draftDiv.classList.remove("draft-disabled");
+      }
     }
   }
 
