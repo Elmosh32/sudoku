@@ -17,6 +17,7 @@
   transform: translateZ(0);
   transition: background-color 0.1s ease-in-out;
   -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
   height: auto;
   flex-basis: 32%;
   margin: 1%;

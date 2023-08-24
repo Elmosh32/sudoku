@@ -43,7 +43,7 @@ var navbarItems = `<div class="container-fluid">
           <a href="#" class="nav-link" data-toggle="collapse">
             Dark Mode
             <label class="switch">
-              <input type="checkbox" onclick="toggleThemeMode()" />
+              <input id="ThemeMode" type="checkbox" onclick="toggleThemeMode()" title="Toggle theme mode" placeholder="Theme mode">
               <span class="slider round"></span>
             </label>
           </a>

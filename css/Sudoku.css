@@ -544,6 +544,10 @@ input:checked + .slider:before {
 }
 
 .paused-board {
-  content-visibility: hidden;
+  font-size: 0px !important;
   background-color: whitesmoke !important;
+}
+
+.hidden {
+  display: none;
 }

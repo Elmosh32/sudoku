@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
     <link rel="icon" href="../favicon.ico" />
     <title>Sudoku</title>
 
@@ -122,7 +121,7 @@
       </div>
 
       <div class="game-container">
-        <div id="stopwatchContainer" style="display: none">
+        <div id="stopwatchContainer" class="hidden">
           <button id="pauseBtn" class="btn btn-primary">Pause</button>
           <div id="stopwatch">00:00</div>
           <button id="resumeBtn" class="btn btn-success" disabled>
