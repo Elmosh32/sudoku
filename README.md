@@ -13,5 +13,6 @@
 * CSS
 
 ---
-#### Deployed Website:[https://elmosh32.github.io/sudoku/]
+#### Deployed Website:![photo_2023-08-24_18-05-24](https://github.com/Elmosh32/sudoku/assets/61812199/505c8989-d370-49ba-9566-737574b940ef)
+[https://elmosh32.github.io/sudoku/]
 
