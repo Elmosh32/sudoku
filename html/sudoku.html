@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <meta http-equiv="Permissions-Policy" content="interest-cohort=()" />
-    <link rel="icon" href="../favicon.ico" />
-    <title>Sudoku</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
@@ -47,9 +45,6 @@
     <link rel="stylesheet" href="../css/Number.css" />
     <link rel="stylesheet" href="../css/Cell.css" />
 
-    <!-- jQuery Script
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
-
     <!-- JavaScript Files -->
     <script src="../js/Sudoku.js"></script>
     <script src="../js/Number.js"></script>
@@ -57,6 +52,8 @@
     <script src="../js/GameManager.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/confetti-js/dist/index.min.js"></script>
+    <link rel="icon" href="../favicon.ico" />
+    <title>Sudoku</title>
   </head>
 
   <body>
@@ -117,14 +114,18 @@
             >
           </div>
         </div>
-        <button id="cmdStart" onclick="clickStart()">Start Game</button>
+        <button id="cmdStart" type="button" onclick="clickStart()">
+          Start Game
+        </button>
       </div>
 
       <div class="game-container">
         <div id="stopwatchContainer" class="hidden">
-          <button id="pauseBtn" class="btn btn-primary">Pause</button>
+          <button id="pauseBtn" type="button" class="btn btn-primary">
+            Pause
+          </button>
           <div id="stopwatch">00:00</div>
-          <button id="resumeBtn" class="btn btn-success" disabled>
+          <button id="resumeBtn" type="button" class="btn btn-success" disabled>
             Resume
           </button>
         </div>

@@ -17,7 +17,7 @@ let soundOn = true;
 const incorrect = new Audio("../sound/572936__bloodpixelhero__error.wav");
 const correct = new Audio("../sound/476178__unadamlar__correct-choice.wav");
 const areaCompleted = new Audio("../sound/531510__eponn__correct-blips.wav");
-const winSound = new Audio("../sound/668436__david819__win.mp3");
+const winSound = new Audio("../sound/win.mp3");
 const deleteSound = new Audio("../sound/del.wav");
 setSoundVolume(0.5);
 
@@ -714,10 +714,13 @@ function changeButtonsClass() {
   -----------------------------------------------------------------watch funcs-------------------------------------------------------------
   -----------------------------------------------------------------------------------------------------------------------------------------*/
 document.addEventListener("DOMContentLoaded", function () {
-  document.getElementById("pauseBtn").addEventListener("click", pauseStopwatch);
-  document
-    .getElementById("resumeBtn")
-    .addEventListener("click", resumeStopwatch);
+  const pauseBtn = document.getElementById("pauseBtn");
+  if (pauseBtn) {
+    pauseBtn.addEventListener("click", pauseStopwatch);
+    document
+      .getElementById("resumeBtn")
+      .addEventListener("click", resumeStopwatch);
+  }
 });
 
 function startStopwatch() {
