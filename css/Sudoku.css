@@ -132,8 +132,6 @@ h2 {
 .numbers {
   display: grid;
   order: 2;
-  height: fit-content;
-  width: fit-content;
   margin-inline-start: -251px;
 }
 
