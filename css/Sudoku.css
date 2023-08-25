@@ -151,7 +151,7 @@ h2 {
   border-radius: 12px;
   border: 1px solid var(--stopwatch-borderline-color);
   z-index: 9999;
-  margin-top: 0vh;
+  margin-top: 0%;
   align-self: flex-start;
 }
 
