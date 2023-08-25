@@ -31,7 +31,6 @@ function loadGame() {
   createGUI();
   chosenCell = null;
   isDraft = false;
-  isDarkMode = false;
   validCells -= EMPTY_CELLS[level];
   document.getElementById("stopwatchContainer").style.display = "inline";
   startStopwatch();
@@ -665,7 +664,7 @@ document.addEventListener("DOMContentLoaded", function () {
   --------------------------------------------------------------darkmode funcs-------------------------------------------------------------
   -----------------------------------------------------------------------------------------------------------------------------------------*/
 function toggleThemeMode() {
-  isDarkMode = localStorage.getItem("isDarkMode") === "false";
+  isDarkMode = localStorage.getItem("isDarkMode") !== "true";
   localStorage.setItem("isDarkMode", isDarkMode.toString());
   document.documentElement.setAttribute(
     "data-force-color-mode",
