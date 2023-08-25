@@ -665,7 +665,7 @@ document.addEventListener("DOMContentLoaded", function () {
   --------------------------------------------------------------darkmode funcs-------------------------------------------------------------
   -----------------------------------------------------------------------------------------------------------------------------------------*/
 function toggleThemeMode() {
-  isDarkMode = !isDarkMode;
+  isDarkMode = localStorage.getItem("isDarkMode") === "false";
   localStorage.setItem("isDarkMode", isDarkMode.toString());
   document.documentElement.setAttribute(
     "data-force-color-mode",
