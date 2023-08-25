@@ -156,7 +156,7 @@ h2 {
 }
 
 #stopwatch {
-  display: inline;
+  display: inline-block;
   font-size: 30px;
   color: var(--p-text-color);
   font-weight: bold;
