@@ -148,7 +148,7 @@ h2 {
   background-color: var(--stopwatch-background-color);
   padding: 4px;
   order: 2;
-  border-radius: 12px;
+  border-radius: 34px;
   border: 1px solid var(--stopwatch-borderline-color);
   z-index: 9999;
   margin-top: 2px;
