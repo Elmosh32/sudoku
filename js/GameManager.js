@@ -7,16 +7,17 @@ let level;
 let neighborsCells = [];
 let sameValCells = [];
 let validCells = BOARD_SIZE;
+let animatedCells = [];
 
 let elapsedTime = 0;
 let stopwatchInterval;
 let isPaused = false;
-
 let isDarkMode;
+
 let soundOn = true;
-const incorrect = new Audio("../sound/572936__bloodpixelhero__error.wav");
-const correct = new Audio("../sound/476178__unadamlar__correct-choice.wav");
-const areaCompleted = new Audio("../sound/531510__eponn__correct-blips.wav");
+const incorrect = new Audio("../sound/error.wav");
+const correct = new Audio("../sound/correct-choice.wav");
+const areaCompleted = new Audio("../sound/correct-blips.wav");
 const winSound = new Audio("../sound/win.mp3");
 const deleteSound = new Audio("../sound/del.wav");
 setSoundVolume(0.5);
@@ -107,7 +108,7 @@ function createNumbers() {
   }
 
   for (let i = 1; i <= GRID_SIZE; i++) {
-    numbers.push(new NumberB(i));
+    numbers.push(new NumberPanel(i));
     numbers[i - 1].amount = numbersCounts[i - 1];
   }
 
@@ -293,13 +294,7 @@ function clickNumber(e) {
         increaseAmountVal(e, currVal);
         validCells++;
 
-        if (activeBoxAnim() || activeColAnim() || activeRowAnim()) {
-          setTimeout(clearAnimationClasses, 1300);
-          if (soundOn) {
-            areaCompleted.play();
-          }
-        }
-
+        runCellsAnimation();
         sameVal(numbers[currVal - 1].val, index);
 
         if (soundOn) {
@@ -315,10 +310,6 @@ function clickNumber(e) {
 }
 
 function getCellIndex() {
-  // if (!choosenCell) {
-  //   return -1;
-  // }
-
   let boardDiv = document.getElementsByClassName("board")[0];
   for (let i = 0; i < boardDiv.childNodes.length; i++) {
     if (boardDiv.childNodes[i] == choosenCell) {
@@ -327,6 +318,67 @@ function getCellIndex() {
   }
 }
 
+function decreaseAmountVal(num) {
+  document.getElementsByClassName("numbers")[0].childNodes.forEach((n) => {
+    if (n.firstChild.innerHTML == num) {
+      numbers[num - 1].decreaseAmount();
+      n.lastChild.innerHTML = numbers[num - 1].amount;
+    }
+  });
+}
+
+function increaseAmountVal(e, index) {
+  numbers[index - 1].increaseAmount();
+  e.target.lastChild.innerHTML = numbers[index - 1].amount;
+}
+
+function isMobileOrTablet() {
+  const userAgent = navigator.userAgent.toLowerCase();
+  return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
+    userAgent
+  );
+}
+
+function isEmptyCell() {
+  index = getCellIndex();
+
+  if (gameBoard.getVal(index) == 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function endGame() {
+  if (soundOn) {
+    winSound.play();
+  }
+  clearInterval(stopwatchInterval);
+
+  const endMsgContainer = document.createElement("div");
+  endMsgContainer.classList.add("endmsg-container");
+
+  let endMsg = document.createElement("div");
+  endMsg.innerHTML = "<h1>Congratulations! You Solved the Puzzle!</h1>";
+  endMsg.classList.add("endmsg");
+  endMsgContainer.appendChild(endMsg);
+
+  document.body.appendChild(endMsgContainer);
+
+  document.querySelector(".board").style.display = "none";
+  document.querySelector(".numbers").style.display = "none";
+  document.querySelector("#stopwatchContainer").style.display = "none";
+
+  setTimeout(function () {
+    window.location.href = "sudoku.html";
+  }, 3500);
+
+  showConfetti();
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------------------------
+  ----------------------------------------------------------delete Funcs--------------------------------------------------------------------
+  -----------------------------------------------------------------------------------------------------------------------------------------*/
 function deleteCell(e) {
   let num, index, validNum;
   let draftDiv = document.getElementById("cmdDraft");
@@ -360,20 +412,9 @@ function deleteCell(e) {
   }
 }
 
-function decreaseAmountVal(num) {
-  document.getElementsByClassName("numbers")[0].childNodes.forEach((n) => {
-    if (n.firstChild.innerHTML == num) {
-      numbers[num - 1].decreaseAmount();
-      n.lastChild.innerHTML = numbers[num - 1].amount;
-    }
-  });
-}
-
-function increaseAmountVal(e, index) {
-  numbers[index - 1].increaseAmount();
-  e.target.lastChild.innerHTML = numbers[index - 1].amount;
-}
-
+/*-----------------------------------------------------------------------------------------------------------------------------------------
+  ----------------------------------------------------------draft Funcs--------------------------------------------------------------------
+  -----------------------------------------------------------------------------------------------------------------------------------------*/
 function clickDraft(event) {
   let draftDiv = document.getElementById("cmdDraft");
 
@@ -414,13 +455,6 @@ function clickDraft(event) {
   isDraft = !isDraft;
 }
 
-function isMobileOrTablet() {
-  const userAgent = navigator.userAgent.toLowerCase();
-  return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(
-    userAgent
-  );
-}
-
 function toggleDraftCell() {
   if (isDraft) {
     choosenCell.firstChild.style.diplay = "none";
@@ -441,16 +475,6 @@ function assignDraft(num) {
   }
 }
 
-function isEmptyCell() {
-  index = getCellIndex();
-
-  if (gameBoard.getVal(index) == 0) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 function isDraftCell() {
   return choosenCell.lastChild.style.display == "block";
 }
@@ -463,148 +487,81 @@ function clearDrafts() {
   }
 }
 
-function endGame() {
-  if (soundOn) {
-    winSound.play();
-  }
-  clearInterval(stopwatchInterval);
-
-  const endMsgContainer = document.createElement("div");
-  endMsgContainer.classList.add("endmsg-container");
-
-  let endMsg = document.createElement("div");
-  endMsg.innerHTML = "<h1>Congratulations! You Solved the Puzzle!</h1>";
-  endMsg.classList.add("endmsg");
-  endMsgContainer.appendChild(endMsg);
-
-  document.body.appendChild(endMsgContainer);
-
-  document.querySelector(".board").style.display = "none";
-  document.querySelector(".numbers").style.display = "none";
-  document.querySelector("#stopwatchContainer").style.display = "none";
-
-  setTimeout(function () {
-    window.location.href = "sudoku.html";
-  }, 3500);
-
-  showConfetti();
-}
-
 /*-----------------------------------------------------------------------------------------------------------------------------------------
   --------------------------------------------------------Animation Funcs------------------------------------------------------------------
   -----------------------------------------------------------------------------------------------------------------------------------------*/
-function clearAnimationClasses() {
-  neighborsCells.forEach((cell) => {
-    cell.classList.remove("active-box", "active-column", "active-row");
-  });
-}
+function runCellsAnimation() {
+  let boardDiv = document.getElementsByClassName("board")[0];
+  let runAnimFlag =
+    checkRowCells(boardDiv) + checkColCells(boardDiv) + checkBoxCells(boardDiv);
 
-function activeRowAnim() {
-  for (let i = 0; i < GRID_SIZE; i++) {
-    if (gameBoard.getVal(getRow(index) * GRID_SIZE + i) == EMPTY) {
-      return false;
+  if (runAnimFlag) {
+    animateCells();
+    setTimeout(clearAnimationClasses, 1300);
+    if (soundOn) {
+      areaCompleted.play();
     }
   }
-
-  let boardDiv = document.getElementsByClassName("board")[0];
-  let rowCells = [];
-  for (let i = 0; i < GRID_SIZE; i++) {
-    rowCells.push(boardDiv.childNodes[getRow(index) * GRID_SIZE + i]);
-  }
-
-  animateCellsFromOutermost(rowCells, "active-row");
-
-  return true;
 }
 
-function activeColAnim() {
-  for (let i = 0; i < GRID_SIZE; i++) {
-    if (gameBoard.getVal(i * GRID_SIZE + getColumn(index)) == EMPTY) {
-      return false;
-    }
-  }
-
-  let boardDiv = document.getElementsByClassName("board")[0];
-  let colCells = [];
-  for (let i = 0; i < GRID_SIZE; i++) {
-    colCells.push(boardDiv.childNodes[i * GRID_SIZE + getColumn(index)]);
-  }
-
-  animateCellsFromOutermost(colCells, "active-column");
-
-  return true;
-}
-
-function activeBoxAnim() {
+function checkBoxCells(boardDiv) {
+  let boxCells = [];
   index = getCellIndex();
   const squareStartIndex = getSquareStartIndex(index);
+
   for (let i = 0; i < BOX_SIZE; i++) {
     for (let j = 0; j < BOX_SIZE; j++) {
       if (gameBoard.getVal(squareStartIndex + i * GRID_SIZE + j) == EMPTY) {
         return false;
       }
-    }
-  }
-
-  let boardDiv = document.getElementsByClassName("board")[0];
-  let boxCells = [];
-  for (let i = 0; i < BOX_SIZE; i++) {
-    for (let j = 0; j < BOX_SIZE; j++) {
       boxCells.push(boardDiv.childNodes[squareStartIndex + i * GRID_SIZE + j]);
     }
   }
 
-  animateCells(boxCells, "active-box");
-
+  animatedCells = animatedCells.concat(boxCells);
   return true;
 }
 
-function animateCellsFromOutermost(cells, animationClass) {
-  const animationDuration = 255;
-  const middleIndex = Math.floor(cells.length / 2);
+function checkRowCells(boardDiv) {
+  let rowsCells = [];
+  index = getCellIndex();
 
-  for (let i = 0; i < middleIndex; i++) {
-    setTimeout(() => {
-      cells[i].classList.add(animationClass);
-    }, animationDuration * i);
+  for (let i = 0; i < GRID_SIZE; i++) {
+    if (gameBoard.getVal(getRow(index) * GRID_SIZE + i) == EMPTY) {
+      return false;
+    }
+    rowsCells.push(boardDiv.childNodes[getRow(index) * GRID_SIZE + i]);
   }
 
-  for (let i = cells.length - 1; i >= middleIndex; i--) {
-    setTimeout(() => {
-      cells[i].classList.add(animationClass);
-    }, animationDuration * (cells.length - i));
-  }
-  cells[middleIndex].classList.add(animationClass);
+  animatedCells = animatedCells.concat(rowsCells);
+  return true;
 }
 
-function animateCells(cells, animationClass) {
-  const animationDuration = 255;
-  const middleIndex = Math.floor(GRID_SIZE / 2);
+function checkColCells(boardDiv) {
+  let colsCells = [];
 
-  cells[middleIndex].classList.add(animationClass);
-  for (let i = 0; i <= middleIndex - 1; i++) {
-    setTimeout(() => {
-      cells[i].classList.add(animationClass);
-    }, animationDuration * (middleIndex - i));
+  for (let i = 0; i < GRID_SIZE; i++) {
+    if (gameBoard.getVal(i * GRID_SIZE + getColumn(index)) == EMPTY) {
+      return false;
+    }
+    colsCells.push(boardDiv.childNodes[i * GRID_SIZE + getColumn(index)]);
   }
 
-  for (let i = GRID_SIZE - 1; i >= middleIndex + 1; i--) {
-    setTimeout(() => {
-      cells[i].classList.add(animationClass);
-    }, animationDuration * (i - middleIndex));
+  animatedCells = animatedCells.concat(colsCells);
+  return true;
+}
+
+function animateCells() {
+  for (const cell of animatedCells) {
+    cell.classList.add("active-cells-animation");
   }
+}
 
-  // for (let i = middleIndex - 1; i >= 0; i--) {
-  //   setTimeout(() => {
-  //     cells[i].classList.add(animationClass);
-  //   }, animationDuration * (middleIndex - i));
-  // }
-
-  // for (let i = middleIndex + 1; i < cells.length; i++) {
-  //   setTimeout(() => {
-  //     cells[i].classList.add(animationClass);
-  //   }, animationDuration * (i - middleIndex));
-  // }
+function clearAnimationClasses() {
+  animatedCells.forEach((cell) => {
+    cell.classList.remove("active-cells-animation");
+  });
+  animatedCells = [];
 }
 
 function showConfetti() {

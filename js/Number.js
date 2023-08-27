@@ -1,4 +1,4 @@
-class NumberB {
+class NumberPanel {
   constructor(val) {
     this.val = val;
     this.amount = 0;
