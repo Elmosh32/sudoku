@@ -77,3 +77,10 @@
   background-color: #91bdfe;
   color: #ffffff;
 }
+
+.draft-num {
+  font-weight: bold;
+  font-family: "Courier New", Courier, monospace;
+  font-style: italic;
+  color: #000000d5;
+}
