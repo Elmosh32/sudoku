@@ -179,7 +179,7 @@ function clickCell(e) {
       draftDiv.classList.add("draft-disabled");
     }
   } else {
-    if (choosenCell.textContent.trim()) {
+    if (!isDraftCell() && choosenCell.textContent.trim()) {
       sameVal(choosenCell.textContent, index);
     }
   }
@@ -273,6 +273,9 @@ function clickNumber(e) {
     }
   } else {
     toggleDraftCell();
+    if (!isDraftCell()) {
+      clearDrafts();
+    }
     choosenCell.firstChild.innerHTML = e.target.firstChild.innerHTML;
     index = getCellIndex();
     prevVal = gameBoard.getVal(index);
@@ -429,10 +432,6 @@ function clickDraft(event) {
       if (isEmptyCell()) {
         draftDiv.classList.remove("draft-disabled");
       }
-
-      if (choosenCell.textContent.trim()) {
-        sameVal(choosenCell.textContent, index);
-      }
     }
   } else {
     draftDiv.classList.remove("cmd");
@@ -445,7 +444,6 @@ function clickDraft(event) {
     if (choosenCell) {
       if (!isEmptyCell()) {
         draftDiv.classList.add("draft-disabled");
-        removeSameVal();
       } else {
         draftDiv.classList.remove("draft-disabled");
       }
@@ -467,8 +465,9 @@ function toggleDraftCell() {
 
 function assignDraft(num) {
   let numbersTable = choosenCell.lastChild.getElementsByTagName("td");
-
+  
   if (numbersTable[num - 1].innerHTML == "") {
+    numbersTable[num - 1].classList.add("draft-num");
     numbersTable[num - 1].innerHTML = num;
   } else {
     numbersTable[num - 1].innerHTML = "";
