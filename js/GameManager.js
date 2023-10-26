@@ -173,12 +173,10 @@ function clickCell(e) {
   rowsColumnsNeighbors(index);
 
   if (isDraft) {
-    if (choosenCell.textContent.trim()) {
-       sameVal(choosenCell.textContent, index);//here
-    }
     if (isEmptyCell()) {
       draftDiv.classList.remove("draft-disabled");
     } else {
+      sameVal(choosenCell.textContent, index);//here
       draftDiv.classList.add("draft-disabled");
     }
   } else {
