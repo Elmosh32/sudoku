@@ -12,6 +12,7 @@ class Cell {
     let tblStr;
 
     cellDiv.setAttribute("class", "cell");
+
     cellNum.setAttribute("class", "cell-number");
     if (this.isFixed == true) {
       cellNum.classList.add("cell-fixed");
@@ -32,9 +33,9 @@ class Cell {
   createTable() {
     let str = "";
 
-    for (let i = 1; i <= 3; i++) {
+    for (let i = 1; i <= BOX_SIZE; i++) {
       str += "<tr>";
-      for (let j = 1; j <= 3; j++) {
+      for (let j = 1; j <= BOX_SIZE; j++) {
         str += "<td></td>";
       }
       str += "</tr>";
