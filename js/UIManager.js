@@ -94,7 +94,8 @@ class UIManager {
     this.boardDiv.childNodes[index].lastChild.style.display = "block";
     let numbersTable =
       this.boardDiv.childNodes[index].lastChild.getElementsByTagName("td");
-
+    
+    this.clearDrafts(this.boardDiv.childNodes[index]);
     numbers.forEach((num) => {
       numbersTable[num - 1].classList.add("draft-num");
       numbersTable[num - 1].innerHTML = num;
@@ -115,6 +116,7 @@ class UIManager {
   isDraftCell(chosenCell) {
     return chosenCell.lastChild.style.display == "block";
   }
+
 
   clearDrafts(chosenCell) {
     let numbersTable = chosenCell.lastChild.getElementsByTagName("td");

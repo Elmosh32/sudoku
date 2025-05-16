@@ -238,7 +238,7 @@ class GameLogic {
       if (!this.boardManager.isLegalcell(this.chosenCell, num)) {
         return;
       }
-      console.log("here:" +this.validCells)
+
       this.boardManager.decreaseSameVal(num, this.chosenCell);
       this.validCells--;
       this.boardManager.deleteFromSameValCells(num, this.chosenCell);
