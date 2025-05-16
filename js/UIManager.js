@@ -208,21 +208,44 @@ class UIManager {
     this.showConfetti();
   }
 
-  runCellsAnimation(animatedCells) {
-    this.animateCells(animatedCells);
-    setTimeout(() => this.clearAnimationClasses(animatedCells), 1300);
+  runCellsAnimation(animatedCells, cellVAL) {
+    let sameValsToAnimate;
+    this.currentSameValCells = this.boardManager.getSameValCells(cellVAL);
+
+    if (this.currentSameValCells.length == GRID_SIZE) {
+      sameValsToAnimate = this.currentSameValCells;
+    } else {
+      sameValsToAnimate = null;
+    }
+
+    this.animateCells(animatedCells, sameValsToAnimate);
+    setTimeout(
+      () => this.clearAnimationClasses(animatedCells, sameValsToAnimate),
+      1300
+    );
   }
 
-  animateCells(animatedCells) {
+  animateCells(animatedCells, animatedSameValCells) {
     for (const cell of animatedCells) {
       cell.classList.add("active-cells-animation");
     }
+
+    if (animatedSameValCells)
+      for (const cell of animatedSameValCells) {
+        cell.classList.add("active-same-value-animation");
+      }
   }
 
-  clearAnimationClasses(animatedCells) {
+  clearAnimationClasses(animatedCells, sameValsToAnimate) {
     animatedCells.forEach((cell) => {
       cell.classList.remove("active-cells-animation");
     });
+
+    if (sameValsToAnimate) {
+      sameValsToAnimate.forEach((cell) => {
+        cell.classList.remove("active-same-value-animation");
+      });
+    }
     animatedCells = [];
   }
 

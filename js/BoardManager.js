@@ -134,7 +134,7 @@ class BoardManager {
     );
   }
 
-  isLegalcell(cell) {
+  isLegalcell(cell, num) {
     if (!cell) {
       return false;
     }
@@ -144,7 +144,10 @@ class BoardManager {
     let row = Math.floor(index / GRID_SIZE);
     let col = index % GRID_SIZE;
 
-    if (this.gameBoard[row][col][0] != this.gameBoard[row][col][1]) {
+    if (
+      this.gameBoard[row][col][0] != this.gameBoard[row][col][1] &&
+      this.gameBoard[row][col][0] != num
+    ) {
       return false;
     } else {
       return true;
@@ -264,16 +267,48 @@ class BoardManager {
     }
   }
 
+  getCellByIndex(index) {
+    return this.boardDiv.childNodes[index];
+  }
+
+  getDownCell(cell) {
+    let newIndex = this.getCellIndex(cell) + GRID_SIZE;
+    if (newIndex >= BOARD_SIZE) {
+      return this.boardDiv.childNodes[newIndex - BOARD_SIZE];
+    }
+    return this.boardDiv.childNodes[newIndex];
+  }
+
+  getUpCell(cell) {
+    let newIndex = this.getCellIndex(cell) - GRID_SIZE;
+    if (newIndex < 0) {
+      return this.boardDiv.childNodes[newIndex + BOARD_SIZE];
+    }
+    return this.boardDiv.childNodes[newIndex];
+  }
+
+  getRightCell(cell) {
+    let newIndex = this.getCellIndex(cell) + 1;
+    if (newIndex >= BOARD_SIZE) {
+      return this.boardDiv.childNodes[0];
+    }
+    return this.boardDiv.childNodes[newIndex];
+  }
+
+  getLeftCell(cell) {
+    let newIndex = this.getCellIndex(cell) - 1;
+    if (newIndex < 0) {
+      return this.boardDiv.childNodes[BOARD_SIZE - 1];
+    }
+    return this.boardDiv.childNodes[newIndex];
+  }
+
   isEmptyCell(cell) {
     if (cell && !this.getValByCell(cell)) {
       return true;
     } else {
       return false;
     }
-  }
-
-  getCurrentCell() {
-    return this.boardDiv.childNodes[this.getCellIndex()];
   }
 
   initSquareFullCells() {
@@ -458,8 +493,14 @@ class BoardManager {
       this.numbers[num - 1].amount;
   }
 
-  updateSameValCells(cellVAL, chosenCell) {
+  increaseSameVal(cellVAL, chosenCell) {
     this.sameValCells[cellVAL - 1].push(chosenCell);
+  }
+
+  decreaseSameVal(cellVAL, chosenCell) {
+    this.sameValCells[cellVAL - 1] = this.sameValCells[cellVAL - 1].filter(
+      (cell) => cell !== chosenCell
+    );
   }
 
   initSameValCells() {
@@ -495,10 +536,18 @@ class BoardManager {
   }
 
   getSameValCells(cellVAL) {
+    if (cellVAL <= EMPTY || cellVAL > GRID_SIZE) {
+      return [];
+    }
+
     return this.sameValCells[cellVAL - 1];
   }
 
   getNeighborsCells(cell) {
+    if (!cell) {
+      return [];
+    }
+
     let index = this.getCellIndex(cell);
     return this.neighborsCells[index];
   }

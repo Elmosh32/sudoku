@@ -394,8 +394,9 @@ h2 {
   --p-text-color: #4a4a4a;
   --li-text-color: #884ea0;
   --cells-background-anim-color: #5eb8f89c;
+  --same-value-animation-color: #5606859c;
   --toggle-background-color: rgb(255, 98, 0);
-  --dark-mode-sign: "☀️";
+  --dark-mode-sign: "☀";
 }
 
 :root[data-force-color-mode="dark"] {
@@ -408,6 +409,7 @@ h2 {
   --p-text-color: #eaeaea;
   --li-text-color: #f5f5f5;
   --cells-background-anim-color: #b5f85e9c;
+  --same-value-animation-color: #b4d5fc9c;
   --toggle-background-color: rgb(23, 2, 2);
   --dark-mode-sign: "🌙";
 }
@@ -426,6 +428,22 @@ body {
   50%,
   100% {
     background-color: var(--cells-background-anim-color);
+  }
+  25%,
+  75% {
+    background-color: whitesmoke;
+  }
+}
+
+.active-same-value-animation {
+  animation: sameValueAnimation 1s alternate;
+}
+
+@keyframes sameValueAnimation {
+  0%,
+  50%,
+  100% {
+    background-color: var(--same-value-animation-color);
   }
   25%,
   75% {

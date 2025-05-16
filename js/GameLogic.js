@@ -33,15 +33,15 @@ class GameLogic {
     });
 
     numbersDivs.forEach((numDiv) => {
-      numDiv.onclick = (e) => this.clickNumber(e);
+      numDiv.onclick = (e) => this.handleNumberInput(e);
     });
     document.addEventListener("keydown", (e) => this.handleKeyDown(e));
 
-    delDiv.onclick = (e) => this.deleteCell(e);
+    delDiv.onclick = (e) => this.clearCell(e);
 
-    draftDiv.onclick = (e) => this.clickDraft(e);
+    draftDiv.onclick = (e) => this.handleDraftMode(e);
 
-    autofillDiv.onclick = (e) => this.autofill(e);
+    autofillDiv.onclick = (e) => this.autoFillCells(e);
 
     resumeBtn.addEventListener("click", () => {
       this.handleResumeClick();
@@ -60,7 +60,9 @@ class GameLogic {
       return;
     }
 
-    this.chosenCell = e.target;
+    if (e.target) {
+      this.chosenCell = e.target;
+    }
 
     this.uiManager.removeNeighborsMark();
     this.uiManager.removeSameValMark(this.chosenCell.textContent);
@@ -92,47 +94,28 @@ class GameLogic {
     }
   }
 
-  clickNumber(e) {
+  handleNumberInput(e) {
     if (this.timerManager.getTimerStatus() || this.chosenCell == null) {
       return;
     }
 
-    let currVal, prevVal;
-
     if (this.isDraft) {
       if (this.boardManager.isEmptyCell(this.chosenCell)) {
         this.uiManager.toggleDraftCell(this.chosenCell, this.isDraft);
-        if (this.keyboardNumber) {
-          currVal = this.keyboardNumber;
-          this.uiManager.assignDraft(parseInt(currVal), this.chosenCell);
-          this.keyboardNumber = null;
-        } else {
-          this.uiManager.assignDraft(
-            e.target.firstChild.innerHTML,
-            this.chosenCell
-          );
-        }
+        const boundSetVal = this.uiManager.assignDraft.bind(this.uiManager);
+        this.numInputType(e, boundSetVal);
       }
     } else {
       this.uiManager.toggleDraftCell(this.chosenCell, this.isDraft);
       if (!this.uiManager.isDraftCell(this.chosenCell)) {
         this.uiManager.clearDrafts(this.chosenCell);
       }
-      prevVal = this.boardManager.getValByCell(this.chosenCell);
 
-      if (this.keyboardNumber) {
-        this.chosenCell.firstChild.innerHTML = this.keyboardNumber;
-        currVal = this.keyboardNumber;
-        this.boardManager.setVal(parseInt(currVal), this.chosenCell);
-        this.keyboardNumber = null;
-      } else {
-        this.chosenCell.firstChild.innerHTML = e.target.firstChild.innerHTML;
-        this.boardManager.setVal(
-          parseInt(this.chosenCell.firstChild.innerHTML),
-          this.chosenCell
-        );
-        currVal = parseInt(e.target.firstChild.innerHTML);
-      }
+      let prevVal = this.boardManager.getValByCell(this.chosenCell);
+      const boundSetVal = this.boardManager.setVal.bind(this.boardManager);
+      let currVal = this.numInputType(e, boundSetVal);
+      this.chosenCell.firstChild.innerHTML = currVal;
+
       this.uiManager.removeIllegalCellStyle(this.chosenCell);
       if (!this.boardManager.isLegalcell(this.chosenCell)) {
         this.uiManager.removeSameValMark(currVal);
@@ -144,25 +127,35 @@ class GameLogic {
         }
 
         this.uiManager.addIllegalCellStyle(this.chosenCell);
+        if (prevVal != EMPTY) {
+          this.boardManager.decreaseSameVal(prevVal, this.chosenCell);
+        }
+
+        this.boardManager.deleteFromSameValCells(currVal, this.chosenCell);
         soundManager.playSound("incorrect");
       } else {
         if (prevVal != this.numbers[currVal - 1].val) {
           this.boardManager.increaseAmountVal(currVal);
           this.validCells++;
 
+          this.boardManager.increaseSameVal(
+            this.numbers[currVal - 1].val,
+            this.chosenCell
+          );
           let animatedCells = this.boardManager.getAnimatedCells(
             this.chosenCell
           );
-          if (animatedCells.length > EMPTY) {
-            this.uiManager.runCellsAnimation(animatedCells);
+          let currentSameValCells = this.boardManager.getSameValCells(currVal);
+
+          if (
+            animatedCells.length > EMPTY ||
+            currentSameValCells.length == GRID_SIZE
+          ) {
+            this.uiManager.runCellsAnimation(animatedCells, currVal);
             soundManager.playSound("areaCompleted");
           }
           this.chosenCell.classList.display = "";
           this.uiManager.markSameVal(
-            this.numbers[currVal - 1].val,
-            this.chosenCell
-          );
-          this.boardManager.updateSameValCells(
             this.numbers[currVal - 1].val,
             this.chosenCell
           );
@@ -184,15 +177,45 @@ class GameLogic {
 
     if (key >= "1" && key <= "9") {
       this.keyboardNumber = parseInt(key, 10);
-      this.clickNumber(this.chosenCell);
+      this.handleNumberInput(this.chosenCell);
     }
 
     if (key === "Backspace") {
-      this.deleteCell(e);
+      this.clearCell(e);
+    }
+
+    if (key === "ArrowUp") {
+      e.preventDefault();
+      if (this.chosenCell) {
+        this.chosenCell = this.boardManager.getUpCell(this.chosenCell);
+        this.clickCell(this.chosenCell);
+      }
+    }
+
+    if (key === "ArrowDown") {
+      e.preventDefault();
+      if (this.chosenCell) {
+        this.chosenCell = this.boardManager.getDownCell(this.chosenCell);
+        this.clickCell(this.chosenCell);
+      }
+    }
+
+    if (key === "ArrowRight") {
+      if (this.chosenCell) {
+        this.chosenCell = this.boardManager.getRightCell(this.chosenCell);
+        this.clickCell(this.chosenCell);
+      }
+    }
+
+    if (key === "ArrowLeft") {
+      if (this.chosenCell) {
+        this.chosenCell = this.boardManager.getLeftCell(this.chosenCell);
+        this.clickCell(this.chosenCell);
+      }
     }
   }
 
-  deleteCell(e) {
+  clearCell(e) {
     if (this.timerManager.getTimerStatus() || this.chosenCell == null) {
       return;
     }
@@ -212,10 +235,11 @@ class GameLogic {
       this.chosenCell.firstChild.textContent = "";
       this.boardManager.setVal(EMPTY, this.chosenCell);
 
-      if (!this.boardManager.isLegalcell(this.chosenCell)) {
+      if (!this.boardManager.isLegalcell(this.chosenCell, num)) {
         return;
       }
-
+      console.log("here:" +this.validCells)
+      this.boardManager.decreaseSameVal(num, this.chosenCell);
       this.validCells--;
       this.boardManager.deleteFromSameValCells(num, this.chosenCell);
       this.uiManager.removeSameValMark(num);
@@ -223,7 +247,7 @@ class GameLogic {
     }
   }
 
-  clickDraft(e) {
+  handleDraftMode(e) {
     if (this.timerManager.getTimerStatus()) {
       return;
     }
@@ -250,7 +274,7 @@ class GameLogic {
     this.isDraft = !this.isDraft;
   }
 
-  autofill(e) {
+  autoFillCells(e) {
     if (this.timerManager.getTimerStatus()) {
       return;
     }
@@ -281,5 +305,23 @@ class GameLogic {
     this.timerManager.pauseStopwatch();
     this.uiManager.pauseWatchStyle();
     this.uiManager.clearMarks(this.chosenCell);
+  }
+
+  numInputType(e, setValFunc) {
+    let currVal;
+    if (this.keyboardNumber) {
+      currVal = this.keyboardNumber;
+      setValFunc(parseInt(currVal), this.chosenCell);
+      // this.boardManager.setVal(parseInt(currVal), this.chosenCell);
+
+      this.keyboardNumber = null;
+    } else {
+      currVal = parseInt(e.target.firstChild.innerHTML);
+      setValFunc(parseInt(currVal), this.chosenCell);
+
+      // this.boardManager.setVal(currVal, this.chosenCell);
+    }
+
+    return currVal;
   }
 }

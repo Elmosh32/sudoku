@@ -1,3 +1,74 @@
+/* OLD STYLE */
+/* .cell {
+  background-color: whitesmoke;
+  display: inline-block;
+
+  border: 1px gray solid;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+
+  box-sizing: border-box;
+}
+
+/* .clicked-cell {
+  background-color: rgb(255, 228, 181);
+  border-color: MediumSlateBlue;
+  border-width: 2px;
+} */
+/* 
+.clicked-same-val {
+  background-color: rgba(17, 178, 232, 0.75);
+  border-color: rgba(0, 0, 255, 0.484);
+  border-width: 2px;
+}
+
+.clicked-cell-neighbors {
+  background-color: rgba(255, 228, 181, 0.75);
+  border-color: MediumSlateBlue;
+  border-width: 2px;
+}
+
+.illegal-cell {
+  background-color: #ff3030;
+}
+
+.cell-fixed {
+  color: black;
+  pointer-events: none;
+}
+
+.cell-number {
+  pointer-events: none;
+}
+
+.cell-table {
+  display: none;
+  color: #4fc3f7;
+  pointer-events: none;
+  padding: 0 0 0 5px;
+  box-sizing: border-box;
+}
+
+@media (orientation: landscape) {
+  .cell-table {
+    font-size: 1vw;
+  }
+}
+
+@media (orientation: portrait) {
+  .cell-table {
+    font-size: 1vh;
+  }
+}
+
+@media (width < 400px) {
+  .cell-table {
+    font-size: 0.5vh;
+  }
+} */
+
+
 .cell {
   background-color: whitesmoke;
   display: inline-block;
